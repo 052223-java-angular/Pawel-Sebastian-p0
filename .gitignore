@@ -26,6 +26,3 @@ replay_pid*
 *.settings/
 *.classpath
 *.project
-
-.factorypath
-target/
