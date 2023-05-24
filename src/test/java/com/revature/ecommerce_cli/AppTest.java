@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package com.revature.ecommerce_cli;
 
 import static org.junit.Assert.assertTrue;
 
