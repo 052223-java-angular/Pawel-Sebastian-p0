@@ -76,5 +76,3 @@ create table reviews (
 	foreign key (product_id) references products (id)
 );
 
-
-
