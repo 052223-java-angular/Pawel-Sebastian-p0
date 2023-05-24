@@ -8,11 +8,13 @@ drop table if exists products cascade;
 
 drop table if exists orders cascade;
 
-drop table if exists orderproducts cascade;
+drop table if exists order_products cascade;
 
 drop table if exists reviews cascade;
 
-drop table if exists cartproducts cascade;
+drop table if exists cart_products cascade;
+
+DROP TABLE IF EXISTS payment_methods cascade;
 
 create table users (
 	id varchar(255) primary key,
@@ -25,6 +27,15 @@ create table products (
 	name varchar(255) not null,
 	category varchar(255) not null,
 	price decimal not null
+);
+
+create table payment_methods (
+    id varchar(255) primary key,
+    number varchar(16) NOT NULL,
+    expiration_date timestamp NOT NULL,
+    cvc varchar(3) NOT NULL,
+    user_id varchar(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 create table orders (
@@ -51,7 +62,7 @@ create table cart_products(
 	user_id varchar(255),
 	product_id varchar(255),
 	quantity integer not null,
-	foreign key (order_id) references orders(id),
+	foreign key (user_id) references orders(id),
 	foreign key (product_id) references products(id)
 );
 
@@ -65,12 +76,5 @@ create table reviews (
 	foreign key (product_id) references products (id)
 );
 
-create table payment_methods (
-    id varchar(255) primary key,
-    number varchar(16) NOT NULL,
-    expiration_date timestamp NOT NULL,
-    cvc varchar(3) NOT NULL,
-    user_id varchar(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
-)
+
 
