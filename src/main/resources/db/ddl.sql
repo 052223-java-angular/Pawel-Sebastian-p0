@@ -53,3 +53,4 @@ create table reviews (
 	foreign key (user_id) references users (id),
 	foreign key (product_id) references products (id)
 );
+
