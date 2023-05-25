@@ -95,7 +95,7 @@ public class ProductDAO implements CrudDAO<Product> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
@@ -118,7 +118,7 @@ public class ProductDAO implements CrudDAO<Product> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
@@ -144,7 +144,7 @@ public class ProductDAO implements CrudDAO<Product> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
@@ -170,7 +170,7 @@ public class ProductDAO implements CrudDAO<Product> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
@@ -196,7 +196,7 @@ public class ProductDAO implements CrudDAO<Product> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
