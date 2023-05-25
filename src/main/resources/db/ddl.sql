@@ -29,15 +29,6 @@ create table products (
 	price integer not null
 );
 
-create table payment_methods (
-    id varchar(40) primary key,
-    number varchar(16) NOT NULL,
-    expiration_date timestamp NOT NULL,
-    cvc varchar(3) NOT NULL,
-    user_id varchar(40) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
-);
-
 create table orders (
 	id varchar(40) primary key,
 	user_id varchar(40) not null,
