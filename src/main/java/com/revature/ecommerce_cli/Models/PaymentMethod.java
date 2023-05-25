@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.Models;
+package com.revature.ecommerce_cli.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,9 +18,9 @@ public class PaymentMethod {
 
     private String id;
     private String number;
-    private Date expiration_date;
-    private String cvc;
-    private String user_id;
+    private Date expirationDate;
+    private int cvc;
+    private String userId;
     
     
     

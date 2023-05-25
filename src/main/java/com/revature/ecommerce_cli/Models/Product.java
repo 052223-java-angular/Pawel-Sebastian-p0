@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.Models;
+package com.revature.ecommerce_cli.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

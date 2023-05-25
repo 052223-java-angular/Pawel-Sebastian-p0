@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Date;
 
-import com.revature.ecommerce_cli.Models.Order;
-import com.revature.ecommerce_cli.Util.ConnectionFactory;
+import com.revature.ecommerce_cli.models.Order;
+import com.revature.ecommerce_cli.util.ConnectionFactory;
 
 // This is the chef
 public class OrderDAO implements CrudDAO<Order> {

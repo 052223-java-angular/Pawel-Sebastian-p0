@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.Models;
+package com.revature.ecommerce_cli.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,8 +17,8 @@ import lombok.ToString;
 public class OrderProduct {
 
     private String id;
-    private String order_id;
-    private String product_id;
+    private String orderId;
+    private String productId;
     private int quantity; 
     
 }

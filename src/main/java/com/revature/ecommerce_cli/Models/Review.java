@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.Models;
+package com.revature.ecommerce_cli.models;
 
 
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class Review {
     private String id;
     private int rating;
     private String comment;
-    private String user_id;
-    private String product_id;
+    private String userId;
+    private String productId;
 
 }

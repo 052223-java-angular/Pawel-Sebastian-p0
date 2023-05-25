@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.revature.ecommerce_cli.Models.CartProduct;
-import com.revature.ecommerce_cli.Util.ConnectionFactory;
+import com.revature.ecommerce_cli.models.CartProduct;
+import com.revature.ecommerce_cli.util.ConnectionFactory;
 
 // This is the chef
 public class CartProductDAO implements CrudDAO<CartProduct> {
@@ -23,8 +23,8 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, obj.getId());
-                ps.setString(2, obj.getUser_id());
-                ps.setString(3, obj.getProduct_id());
+                ps.setString(2, obj.getUserId());
+                ps.setString(3, obj.getProductId());
                 ps.setInt(4, obj.getQuantity());
                 ps.executeUpdate();
             }
@@ -42,8 +42,8 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "UPDATE cart_products set user_id = ?, product_id = ?, quantity = ? where id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, updater.getUser_id());
-                ps.setString(2, updater.getProduct_id());
+                ps.setString(1, updater.getUserId());
+                ps.setString(2, updater.getProductId());
                 ps.setInt(3, updater.getQuantity());
                 ps.setString(4, updater.getId());
                 ps.executeUpdate();
@@ -86,8 +86,8 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
                     if (rs.next()) {
                         CartProduct cartProduct = new CartProduct();
                         cartProduct.setId(rs.getString("id"));
-                        cartProduct.setUser_id(rs.getString("user_id"));
-                        cartProduct.setProduct_id(rs.getString("product_id"));
+                        cartProduct.setUserId(rs.getString("user_id"));
+                        cartProduct.setProductId(rs.getString("product_id"));
                         cartProduct.setQuantity(rs.getInt("quantity"));
                         return Optional.of(cartProduct);
                     }

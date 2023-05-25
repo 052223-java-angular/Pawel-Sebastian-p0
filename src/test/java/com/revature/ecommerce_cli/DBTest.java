@@ -1,5 +1,5 @@
 package com.revature.ecommerce_cli;
-import com.revature.ecommerce_cli.Util.ConnectionFactory;
+import com.revature.ecommerce_cli.util.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.io.IOException;

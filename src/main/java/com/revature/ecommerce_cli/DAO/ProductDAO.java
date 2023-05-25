@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.revature.ecommerce_cli.Models.Product;
-import com.revature.ecommerce_cli.Util.ConnectionFactory;
+import com.revature.ecommerce_cli.models.Product;
+import com.revature.ecommerce_cli.util.ConnectionFactory;
 
 // This is the chef
 public class ProductDAO implements CrudDAO<Product> {
