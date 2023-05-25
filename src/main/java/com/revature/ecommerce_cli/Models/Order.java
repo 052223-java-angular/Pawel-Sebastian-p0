@@ -1,4 +1,5 @@
-package com.revature.ecommerce_cli.models;
+package com.revature.ecommerce_cli.Models;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,14 +15,11 @@ import java.util.Date;
 @Setter
 @ToString
 
-public class PaymentMethods {
-
+public class Order {
     private String id;
-    private int number;
-    private Date expiration_date;
-    private String cvc;
-    private String user_id;
-    
-    
+    private String userId;
+    private int amount;
+    private Date timePlaced;
+    private String paymentMethodId;
     
 }

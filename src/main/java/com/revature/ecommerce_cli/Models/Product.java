@@ -1,5 +1,4 @@
-package com.revature.ecommerce_cli.models;
-
+package com.revature.ecommerce_cli.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+//import java.util.Currency;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,11 +14,12 @@ import java.util.Date;
 @Setter
 @ToString
 
-public class Orders {
+
+public class Product {
+
     private String id;
-    private String userId;
-    private int amount;
-    private Date timePlaced;
-    private String paymentMethodId;
+    private String name;
+    private String category;
+    private int price;
     
 }

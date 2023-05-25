@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.models;
+package com.revature.ecommerce_cli.Models;
 
 
 import lombok.AllArgsConstructor;
@@ -13,12 +13,10 @@ import lombok.ToString;
 @Setter
 @ToString
 
-public class Reviews {
-
+public class User {
+    
     private String id;
-    private int rating;
-    private String comment;
-    private String user_id;
-    private String product_id;
+    private String username;
+    private String password;
 
 }
