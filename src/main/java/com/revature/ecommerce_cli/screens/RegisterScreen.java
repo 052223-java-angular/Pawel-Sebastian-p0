@@ -1,8 +1,14 @@
 package com.revature.ecommerce_cli.screens;
 
 import java.util.Scanner;
+import com.revature.ecommerce_cli.services.UserService;
 
+import lombok.AllArgsConstructor;
+
+
+@AllArgsConstructor
 public class RegisterScreen implements IScreen{
+    private final UserService userService;
 
     @Override
     public void start(Scanner scan) {
@@ -14,9 +20,8 @@ public class RegisterScreen implements IScreen{
 
             while(true){
                 clearScreen();
-                System.out.println("Welcome to the registration screen.");
-             
-               
+                System.out.println("\nWelcome to the registration screen.");
+                
 
                 //get username
                 username = getUsername(scan);
@@ -24,6 +29,8 @@ public class RegisterScreen implements IScreen{
 
                     break exit;
                 }
+
+
                 //get password
 
                 //confirm user's info
@@ -43,19 +50,42 @@ public class RegisterScreen implements IScreen{
 public String getUsername(Scanner scan){
 
     while(true){
-    System.out.println("Username (x to cancel): ");
+    System.out.println("\nEnter Username (x to cancel): ");
     String username = scan.nextLine();
     
-    scan.nextLine();
+    
+    //scan.nextLine();
 
     if (username.equalsIgnoreCase("x")){
 
         return "x";
     }
-    break;
+
+    if(!userService.isValidUsername(username)){
+
+        clearScreen();
+        System.out.println("Username must be 8-20 characters long");
+        System.out.println("\nPress enter to continue...");
+        scan.nextLine();
+        continue;
     }
-    return "";
-}
+
+    if(!userService.isUniqueUsername(username)){
+        clearScreen();
+        System.out.println("Username must be unique!");
+        System.out.println("\nPress enter to continue...");
+        scan.nextLine();
+        continue;
+
+    }
+
+
+
+
+    break;}
+    // }
+    return "";}
+
     
 public String getPassword(Scanner scan){
     return "";}
