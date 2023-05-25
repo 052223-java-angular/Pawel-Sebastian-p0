@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.Util;
+package com.revature.ecommerce_cli.util;
 
 import java.io.IOException;
 import java.io.InputStream;

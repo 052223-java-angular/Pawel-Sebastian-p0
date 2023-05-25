@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Date;
 
-import com.revature.ecommerce_cli.Models.Order;
-import com.revature.ecommerce_cli.Util.ConnectionFactory;
+import com.revature.ecommerce_cli.models.Order;
+import com.revature.ecommerce_cli.util.ConnectionFactory;
 
 // This is the chef
 public class OrderDAO implements CrudDAO<Order> {
@@ -57,6 +57,7 @@ public class OrderDAO implements CrudDAO<Order> {
                 ps.setString(3, updater.getPaymentMethodId());
                 ps.setTimestamp(4, new Timestamp(updater.getTimePlaced().getTime()));
                 ps.setString(5, updater.getId());
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
@@ -73,6 +74,7 @@ public class OrderDAO implements CrudDAO<Order> {
             String sql = "DELETE FROM orders WHERE id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, id);
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
