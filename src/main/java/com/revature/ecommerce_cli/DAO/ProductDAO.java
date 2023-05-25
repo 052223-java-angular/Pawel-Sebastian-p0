@@ -151,7 +151,7 @@ public class ProductDAO implements CrudDAO<Product> {
         return retArray;
     }
 
-    public List<Product> searchByPriceRange(int first, int second) {
+    public List<Product> findByPriceRange(int first, int second) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "select * from products where price between ? and ?";
@@ -177,7 +177,7 @@ public class ProductDAO implements CrudDAO<Product> {
         return retArray;
     }
 
-    public List<Product> searchByCategory(String name) {
+    public List<Product> findByCategory(String name) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "select * from products where category like '%?%'";

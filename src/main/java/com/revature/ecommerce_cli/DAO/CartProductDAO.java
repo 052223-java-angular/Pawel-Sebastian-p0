@@ -127,7 +127,7 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         return retArray;
     }
 
-    public List<CartProduct> getByUserId(String userId) {
+    public List<CartProduct> findByUserId(String userId) {
         List<CartProduct> retArray = new ArrayList<CartProduct>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "SELECT * FROM cart_products WHERE user_id = ?";
