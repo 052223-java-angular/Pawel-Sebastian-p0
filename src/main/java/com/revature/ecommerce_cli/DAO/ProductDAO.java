@@ -1,6 +1,5 @@
 package com.revature.ecommerce_cli.DAO;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -114,6 +113,12 @@ public class ProductDAO implements CrudDAO<Product> {
                     retArray.add(retProduct);
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find application.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
         }
         return retArray;
     }
