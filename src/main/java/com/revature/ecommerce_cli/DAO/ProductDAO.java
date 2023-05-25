@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import com.revature.ecommerce_cli.Model.Product;
+import com.revature.ecommerce_cli.Models.Product;
 import com.revature.ecommerce_cli.Util.ConnectionFactory;
 
 // This is the chef
@@ -25,7 +25,7 @@ public class ProductDAO implements CrudDAO<Product> {
                 ps.setString(1, obj.getId());
                 ps.setString(2, obj.getName());
                 ps.setString(3, obj.getCategory());
-                ps.setString(4, obj.getPrice());
+                ps.setInt(4, obj.getPrice());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {

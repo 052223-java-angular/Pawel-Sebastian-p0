@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.models;
+package com.revature.ecommerce_cli.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import lombok.ToString;
 @ToString
 
 
-public class CartProducts {
+public class CartProduct {
 
     private String id;
     private String user_id;

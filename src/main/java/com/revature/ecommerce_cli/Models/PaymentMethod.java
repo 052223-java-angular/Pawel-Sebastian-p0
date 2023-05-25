@@ -1,4 +1,4 @@
-package com.revature.ecommerce_cli.models;
+package com.revature.ecommerce_cli.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-//import java.util.Currency;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,12 +14,14 @@ import lombok.ToString;
 @Setter
 @ToString
 
-
-public class Products {
+public class PaymentMethod {
 
     private String id;
-    private String name;
-    private String category;
-    private int price;
+    private String number;
+    private Date expiration_date;
+    private String cvc;
+    private String user_id;
+    
+    
     
 }

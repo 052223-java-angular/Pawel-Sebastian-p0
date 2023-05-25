@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Date;
 
-//import com.revature.ecommerce_cli.Model.Order;
+import com.revature.ecommerce_cli.Models.Order;
 import com.revature.ecommerce_cli.Util.ConnectionFactory;
 
 // This is the chef
@@ -35,7 +35,7 @@ public class OrderDAO implements CrudDAO<Order> {
                 ps.setString(2, obj.getUserId());
                 ps.setInt(3, obj.getAmount());
                 ps.setString(4, obj.getPaymentMethodId());
-                ps.setTimestamp(5, sql.Timestamp(obj.getTimePlaced()));
+                ps.setTimestamp(5, new Timestamp(obj.getTimePlaced().getTime()));
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -56,7 +56,7 @@ public class OrderDAO implements CrudDAO<Order> {
                 ps.setString(1, updater.getUserId());
                 ps.setInt(2, updater.getAmount());
                 ps.setString(3, updater.getPaymentMethodId());
-                ps.setTimestamp(4, updater.Timestamp(updater.getTimePlaced()));
+                ps.setTimestamp(4, new Timestamp(updater.getTimePlaced().getTime()));
                 ps.setString(5, updater.getId());
             }
         } catch (SQLException e) {
@@ -129,7 +129,14 @@ public class OrderDAO implements CrudDAO<Order> {
                     retArray.add(retOrder);
                 }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find application.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
         }
+
         return retArray;
     }
 

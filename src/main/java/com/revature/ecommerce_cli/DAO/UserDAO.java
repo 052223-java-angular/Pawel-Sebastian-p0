@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
-//import com.revature.ecommerce_cli.Model.User;
+import com.revature.ecommerce_cli.Models.User;
 import com.revature.ecommerce_cli.Util.ConnectionFactory;
 
 // This is the chef
