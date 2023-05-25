@@ -14,8 +14,6 @@ drop table if exists reviews cascade;
 
 drop table if exists cart_products cascade;
 
-DROP TABLE IF EXISTS payment_methods cascade;
-
 create table users (
 	id varchar(40) primary key,
 	username varchar(24) not null unique,
@@ -34,8 +32,6 @@ create table orders (
 	user_id varchar(40) not null,
 	amount integer not null,
 	time_placed timestamp not null default now(), 
-	payment_method_id varchar(40) NOT NULL,
-	FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id),
 	foreign key (user_id) references users(id)
 );
 
