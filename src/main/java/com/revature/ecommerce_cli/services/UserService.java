@@ -2,7 +2,7 @@ package com.revature.ecommerce_cli.services;
 
 import java.util.Optional;
 import com.revature.ecommerce_cli.models.User;
-
+import org.mindrot.jbcrypt.BCrypt;
 import com.revature.ecommerce_cli.DAO.UserDAO;
 
 import lombok.AllArgsConstructor;
@@ -12,6 +12,15 @@ import lombok.AllArgsConstructor;
 public class UserService {
     private final UserDAO userDao;
 
+    
+
+    public User register(String username, String password) {
+        
+        String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
+        User newUser = new User(username, hashed);
+        userDao.save(newUser);
+        return newUser;
+    }
 
     public boolean isValidUsername(String username){
 
@@ -29,5 +38,14 @@ public class UserService {
         }
         return false;
     }
-    
+
+    public boolean isValidPassword(String username) {
+        return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
+    }
+
+    public boolean isSamePassword(String password, String confirmPassword){
+
+        return password.equals(confirmPassword);
+    }
 }
+
