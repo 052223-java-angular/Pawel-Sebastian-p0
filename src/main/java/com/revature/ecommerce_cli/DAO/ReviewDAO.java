@@ -98,7 +98,7 @@ public class ReviewDAO implements CrudDAO<Review> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
@@ -121,10 +121,63 @@ public class ReviewDAO implements CrudDAO<Review> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
         return retArray;
     }
+
+    public List<Review> findByUserId(String userId) {
+        List<Review> retArray = new ArrayList<Review>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT * FROM reviews WHERE user_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, userId);
+
+                try(ResultSet rs = ps.executeQuery(sql)) {
+                    while(rs.next()) {
+                        Review retReview = new Review(rs.getString("id"), rs.getInt("rating"),
+                            rs.getString("comment"), rs.getString("userId"), rs.getString("productId"));
+                        retArray.add(retReview);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find db.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
+        }
+        return retArray;
+    }
+
+    public List<Review> findByProductId(String productId) {
+        List<Review> retArray = new ArrayList<Review>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT * FROM reviews WHERE product_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, productId);
+
+                try(ResultSet rs = ps.executeQuery(sql)) {
+                    while(rs.next()) {
+                        Review retReview = new Review(rs.getString("id"), rs.getInt("rating"),
+                            rs.getString("comment"), rs.getString("userId"), rs.getString("productId"));
+                        retArray.add(retReview);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find db.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
+        }
+        return retArray;
+    }
+    //sql for searching given product name and user name?
 }

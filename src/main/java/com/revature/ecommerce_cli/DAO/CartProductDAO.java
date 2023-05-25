@@ -96,7 +96,7 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
@@ -120,14 +120,14 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
         return retArray;
     }
 
-    public List<CartProduct> getByUserId(String userId) {
+    public List<CartProduct> findByUserId(String userId) {
         List<CartProduct> retArray = new ArrayList<CartProduct>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "SELECT * FROM cart_products WHERE user_id = ?";
@@ -146,7 +146,7 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            throw new RuntimeException("Cannot find db.properties");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to load jdbc");
         }
