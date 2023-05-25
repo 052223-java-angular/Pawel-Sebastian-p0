@@ -128,7 +128,7 @@ public class ProductDAO implements CrudDAO<Product> {
     public List<Product> findByName(String name) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from products where name = ?";
+            String sql = "select * from products where name like '%?%'";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, name);
@@ -150,4 +150,57 @@ public class ProductDAO implements CrudDAO<Product> {
         }
         return retArray;
     }
+
+    public List<Product> searchByPriceRange(int first, int second) {
+        List<Product> retArray = new ArrayList<Product>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "select * from products where price between ? and ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, first);
+                ps.setInt(2, second);
+                try(ResultSet rs = ps.executeQuery(sql)) {
+                    while(rs.next()) {
+                        Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
+                            rs.getString("category"), rs.getInt("price"));
+                        retArray.add(retProduct);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find application.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
+        }
+        return retArray;
+    }
+
+    public List<Product> searchByCategory(String name) {
+        List<Product> retArray = new ArrayList<Product>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "select * from products where category like '%?%'";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, name);
+
+                try(ResultSet rs = ps.executeQuery(sql)) {
+                    while(rs.next()) {
+                        Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
+                            rs.getString("category"), rs.getInt("price"));
+                        retArray.add(retProduct);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find application.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
+        }
+        return retArray;
+    }
+
 }
