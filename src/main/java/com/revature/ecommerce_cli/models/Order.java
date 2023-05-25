@@ -20,6 +20,5 @@ public class Order {
     private String userId;
     private int amount;
     private Date timePlaced;
-    private String paymentMethodId;
     
 }

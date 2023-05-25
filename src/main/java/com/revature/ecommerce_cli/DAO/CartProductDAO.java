@@ -126,4 +126,47 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         }
         return retArray;
     }
+
+    public List<CartProduct> getByUserId(String userId) {
+        List<CartProduct> retArray = new ArrayList<CartProduct>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT * FROM cart_products WHERE user_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, userId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        CartProduct retCartProduct = new CartProduct(rs.getString("id"), rs.getString("user_id"),
+                            rs.getString("product_id"), rs.getInt("quantity"));
+                        retArray.add(retCartProduct);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find application.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
+        }
+
+        return retArray;
+    }
+
+    public void deleteByUserId(String userId) {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "DELETE FROM cart_products WHERE user_id = ?";
+            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, userId);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to db");
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot find db.properties");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Unable to load jdbc");
+        }
+    }
 }
