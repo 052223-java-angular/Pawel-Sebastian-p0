@@ -44,6 +44,7 @@ public class UserDAO implements CrudDAO<User> {
                 ps.setString(1, updater.getUsername());
                 ps.setString(2, updater.getPassword());
                 ps.setString(3, updater.getId());
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
@@ -60,6 +61,7 @@ public class UserDAO implements CrudDAO<User> {
             String sql = "DELETE FROM users WHERE id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, id);
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");

@@ -45,6 +45,7 @@ public class ProductDAO implements CrudDAO<Product> {
                 ps.setString(2, updater.getCategory());
                 ps.setInt(3, updater.getPrice());
                 ps.setString(4, updater.getId());
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
@@ -61,6 +62,7 @@ public class ProductDAO implements CrudDAO<Product> {
             String sql = "DELETE FROM products WHERE id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, id);
+                ps.executeUpdate();
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
