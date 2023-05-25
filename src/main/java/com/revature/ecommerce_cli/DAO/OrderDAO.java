@@ -7,25 +7,35 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Date;
 
-import com.revature.ecommerce_cli.Model.Product;
+//import com.revature.ecommerce_cli.Model.Order;
 import com.revature.ecommerce_cli.Util.ConnectionFactory;
 
 // This is the chef
-public class ProductDAO implements CrudDAO<Product> {
+public class OrderDAO implements CrudDAO<Order> {
+
+    private static Date fromTimestamp (Timestamp inTime) {
+        return new Date(inTime.getTime());
+    }
 
     @Override
-    public void save(Product obj) {
+
+    public void save(Order obj) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "INSERT INTO products (id, name, category, price) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO orders (id, user_id, amount, payment_method_id, time_placed) " +
+                "VALUES (?, ?, ?, ?, ?)";
+
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, obj.getId());
-                ps.setString(2, obj.getName());
-                ps.setString(3, obj.getCategory());
-                ps.setString(4, obj.getPrice());
+                ps.setString(2, obj.getUserId());
+                ps.setInt(3, obj.getAmount());
+                ps.setString(4, obj.getPaymentMethodId());
+                ps.setTimestamp(5, sql.Timestamp(obj.getTimePlaced()));
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -38,14 +48,16 @@ public class ProductDAO implements CrudDAO<Product> {
     }
 
     @Override
-    public void update(Product updater) {
+    public void update(Order updater) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "UPDATE products set name = ?, category = ?, price = ? where id = ?";
+            String sql = "UPDATE orders set user_id = ?, amount = ?, payment_method_id = ?, time_placed = ?" +
+                " where id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, updater.getName);
-                ps.setString(2, updater.getCategory);
-                ps.setInt(3, updater.getPrice());
-                ps.setString(4, updater.getId());
+                ps.setString(1, updater.getUserId());
+                ps.setInt(2, updater.getAmount());
+                ps.setString(3, updater.getPaymentMethodId());
+                ps.setTimestamp(4, updater.Timestamp(updater.getTimePlaced()));
+                ps.setString(5, updater.getId());
             }
         } catch (SQLException e) {
             throw new RuntimeException("Unable to connect to db");
@@ -59,7 +71,7 @@ public class ProductDAO implements CrudDAO<Product> {
     @Override
     public void delete(String id) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "DELETE FROM products WHERE id = ?";
+            String sql = "DELETE FROM orders WHERE id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, id);
             }
@@ -73,21 +85,22 @@ public class ProductDAO implements CrudDAO<Product> {
     }
 
     @Override
-    public Optional<Product> findById(String id) {
+    public Optional<Order> findById(String id) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "SELECT * FROM products WHERE id = ?";
+            String sql = "SELECT * FROM orders WHERE id = ?";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, id);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        Product product = new Product();
-                        product.setId(rs.getString("id"));
-                        product.setName(rs.getString("name"));
-                        product.setCategory(rs.getString("category"));
-                        product.setPrice(rs.getInt("price"));
-                        return Optional.of(product);
+                        Order order = new Order();
+                        order.setId(rs.getString("id"));
+                        order.setUserId(rs.getString("user_id"));
+                        order.setAmount(rs.getInt("amount"));
+                        order.setTimePlaced(fromTimestamp(rs.getTimestamp("time_placed")));
+                        order.setPaymentMethodId(rs.getString("payment_method_id"));
+                        return Optional.of(order);
                     }
                 }
             }
@@ -103,34 +116,37 @@ public class ProductDAO implements CrudDAO<Product> {
     }
 
     @Override
-    public List<Product> findAll() {
-        List<Product> retArray = new ArrayList<Product>();
+    public List<Order> findAll() {
+        List<Order> retArray = new ArrayList<Order>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             Statement s = conn.createStatement();
-            try(ResultSet rs = s.executeQuery("select * from products")) {
+            try(ResultSet rs = s.executeQuery("select * from user")) {
                 while(rs.next()) {
-                    Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                        rs.getString("category"), rs.getInt("price"));
-                    retArray.add(retProduct);
+                    // should anyone know the password?
+                    Order retOrder = new Order(rs.getString("id"), rs.getString("user_id"),
+                        rs.getInt("amount"), fromTimestamp(rs.getTimestamp("time_placed")),
+                        rs.getString("payment_method_id"));
+                    retArray.add(retOrder);
                 }
             }
         }
         return retArray;
     }
 
-    public List<Product> findByName(String name) {
-        List<Product> retArray = new ArrayList<Product>();
+    public List<Order> findByUserId(String userId) {
+        List<Order> retArray = new ArrayList<Order>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from products where name = ?";
+            String sql = "select * from orders where user_id = ?";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, name);
+                ps.setString(1, userId);
 
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
-                        Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                            rs.getString("category"), rs.getInt("price"));
-                        retArray.add(retProduct);
+                        Order retOrder = new Order(rs.getString("id"), rs.getString("user_id"),
+                            rs.getInt("amount"), fromTimestamp(rs.getTimestamp("time_placed")),
+                            rs.getString("payment_method_id"));
+                        retArray.add(retOrder);
                     }
                 }
             }
@@ -143,4 +159,5 @@ public class ProductDAO implements CrudDAO<Product> {
         }
         return retArray;
     }
+
 }

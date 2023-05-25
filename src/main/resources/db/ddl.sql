@@ -26,7 +26,7 @@ create table products (
 	id varchar(40) primary key,
 	name varchar(64) not null,
 	category varchar(52) not null,
-	price decimal(12, 2) not null
+	price integer not null
 );
 
 create table payment_methods (
@@ -41,7 +41,7 @@ create table payment_methods (
 create table orders (
 	id varchar(40) primary key,
 	user_id varchar(40) not null,
-	amount decimal(12, 2) not null,
+	amount integer not null,
 	time_placed timestamp not null default now(), 
 	payment_method_id varchar(40) NOT NULL,
 	FOREIGN KEY (payment_method_id) REFERENCES payment_methods(id),
