@@ -42,8 +42,8 @@ public class UserDAO implements CrudDAO<User> {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "UPDATE users set username = ?, password = ? where id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, updater.getUsername);
-                ps.setString(2, updater.getPassword);
+                ps.setString(1, updater.getUsername());
+                ps.setString(2, updater.getPassword());
                 ps.setString(3, updater.getId());
             }
         } catch (SQLException e) {

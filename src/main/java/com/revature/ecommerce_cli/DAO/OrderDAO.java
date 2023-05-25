@@ -1,6 +1,5 @@
 package com.revature.ecommerce_cli.DAO;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

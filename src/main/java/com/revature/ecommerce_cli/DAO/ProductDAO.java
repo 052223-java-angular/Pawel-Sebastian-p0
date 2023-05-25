@@ -42,8 +42,8 @@ public class ProductDAO implements CrudDAO<Product> {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "UPDATE products set name = ?, category = ?, price = ? where id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, updater.getName);
-                ps.setString(2, updater.getCategory);
+                ps.setString(1, updater.getName());
+                ps.setString(2, updater.getCategory());
                 ps.setInt(3, updater.getPrice());
                 ps.setString(4, updater.getId());
             }
