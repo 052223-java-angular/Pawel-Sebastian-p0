@@ -3,6 +3,7 @@ package com.revature.ecommerce_cli.screens;
 import java.util.Scanner;
 import com.revature.ecommerce_cli.services.RouterService;
 
+
 public class HomeScreen implements IScreen {
 
 
@@ -35,6 +36,7 @@ public HomeScreen(RouterService router){
                 switch(input.toLowerCase()){
 
                     case "1":
+                        router.navigate("/login", scan);
                     break;
                     case "2":
                         router.navigate("/register", scan);
@@ -59,18 +61,6 @@ public HomeScreen(RouterService router){
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-
-
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         }

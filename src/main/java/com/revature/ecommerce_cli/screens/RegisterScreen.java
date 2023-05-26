@@ -68,7 +68,7 @@ public class RegisterScreen implements IScreen{
                 }
 
                 //break out if info is correct
-                break exit; //remove later for switch
+                break exit; 
             }
 
 
@@ -106,7 +106,7 @@ public String getUsername(Scanner scan){
 
     if(!userService.isUniqueUsername(username)){
         clearScreen();
-        System.out.println("Username must be unique!");
+        System.out.println("Sorry that username is taken! Try again: ");
         System.out.println("\nPress enter to continue...");
         scan.nextLine();
         continue;
