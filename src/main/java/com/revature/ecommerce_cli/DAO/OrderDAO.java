@@ -26,46 +26,50 @@ public class OrderDAO implements CrudDAO<Order> {
 
     public void save(Order obj) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "INSERT INTO orders (id, user_id, amount, payment_method_id, time_placed) " +
-                "VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO orders (id, user_id, amount, time_placed) " +
+                "VALUES (?, ?, ?, ?)";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, obj.getId());
                 ps.setString(2, obj.getUserId());
                 ps.setInt(3, obj.getAmount());
-                ps.setString(4, obj.getPaymentMethodId());
-                ps.setTimestamp(5, new Timestamp(obj.getTimePlaced().getTime()));
+                ps.setTimestamp(4, new Timestamp(obj.getTimePlaced().getTime()));
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find db.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
     }
 
     @Override
     public void update(Order updater) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "UPDATE orders set user_id = ?, amount = ?, payment_method_id = ?, time_placed = ?" +
+            String sql = "UPDATE orders set user_id = ?, amount = ?, time_placed = ?" +
                 " where id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, updater.getUserId());
                 ps.setInt(2, updater.getAmount());
-                ps.setString(3, updater.getPaymentMethodId());
-                ps.setTimestamp(4, new Timestamp(updater.getTimePlaced().getTime()));
-                ps.setString(5, updater.getId());
+                ps.setTimestamp(3, new Timestamp(updater.getTimePlaced().getTime()));
+                ps.setString(4, updater.getId());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find db.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
     }
 
     @Override
@@ -77,12 +81,15 @@ public class OrderDAO implements CrudDAO<Order> {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find db.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
     }
 
     @Override
@@ -100,18 +107,20 @@ public class OrderDAO implements CrudDAO<Order> {
                         order.setUserId(rs.getString("user_id"));
                         order.setAmount(rs.getInt("amount"));
                         order.setTimePlaced(fromTimestamp(rs.getTimestamp("time_placed")));
-                        order.setPaymentMethodId(rs.getString("payment_method_id"));
                         return Optional.of(order);
                     }
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
 
         return Optional.empty();
     }
@@ -125,18 +134,20 @@ public class OrderDAO implements CrudDAO<Order> {
                 while(rs.next()) {
                     // should anyone know the password?
                     Order retOrder = new Order(rs.getString("id"), rs.getString("user_id"),
-                        rs.getInt("amount"), fromTimestamp(rs.getTimestamp("time_placed")),
-                        rs.getString("payment_method_id"));
+                        rs.getInt("amount"), fromTimestamp(rs.getTimestamp("time_placed")));
                     retArray.add(retOrder);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
 
         return retArray;
     }
@@ -152,19 +163,21 @@ public class OrderDAO implements CrudDAO<Order> {
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
                         Order retOrder = new Order(rs.getString("id"), rs.getString("user_id"),
-                            rs.getInt("amount"), fromTimestamp(rs.getTimestamp("time_placed")),
-                            rs.getString("payment_method_id"));
+                            rs.getInt("amount"), fromTimestamp(rs.getTimestamp("time_placed")));
                         retArray.add(retOrder);
                     }
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
         return retArray;
     }
 

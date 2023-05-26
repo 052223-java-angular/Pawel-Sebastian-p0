@@ -29,12 +29,15 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find db.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
     }
 
     @Override
@@ -49,12 +52,15 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find db.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
     }
 
     @Override
@@ -66,12 +72,15 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find db.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
     }
 
     @Override
@@ -84,22 +93,25 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        OrderProduct cartProduct = new OrderProduct();
-                        cartProduct.setId(rs.getString("id"));
-                        cartProduct.setOrderId(rs.getString("order_id"));
-                        cartProduct.setProductId(rs.getString("product_id"));
-                        cartProduct.setQuantity(rs.getInt("quantity"));
-                        return Optional.of(cartProduct);
+                        OrderProduct orderProduct = new OrderProduct();
+                        orderProduct.setId(rs.getString("id"));
+                        orderProduct.setOrderId(rs.getString("order_id"));
+                        orderProduct.setProductId(rs.getString("product_id"));
+                        orderProduct.setQuantity(rs.getInt("quantity"));
+                        return Optional.of(orderProduct);
                     }
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
 
         return Optional.empty();
     }
@@ -118,12 +130,94 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to db");
+            throw new RuntimeException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException("Cannot find application.properties");
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to load jdbc");
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
         }
+
         return retArray;
+    }
+
+    public List<OrderProduct> findByOrderId(String orderId) {
+        List<OrderProduct> retArray = new ArrayList<OrderProduct>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+           String sql = "SELECT * FROM order_products WHERE order_id = ?";
+
+           try (PreparedStatement ps = conn.prepareStatement(sql)) {
+               ps.setString(1, orderId);
+
+               try (ResultSet rs = ps.executeQuery()) {
+                   while (rs.next()) {
+                       OrderProduct retOrderProduct = new OrderProduct(rs.getString("id"), rs.getString("order_id"),
+                           rs.getString("product_id"), rs.getInt("quantity"));
+                       retArray.add(retOrderProduct);
+                   }
+               }
+           }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+
+
+        return retArray;
+    }
+
+    public List<OrderProduct> findByProductId(String orderId) {
+        List<OrderProduct> retArray = new ArrayList<OrderProduct>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+           String sql = "SELECT * FROM order_products WHERE product_id = ?";
+
+           try (PreparedStatement ps = conn.prepareStatement(sql)) {
+               ps.setString(1, orderId);
+
+               try (ResultSet rs = ps.executeQuery()) {
+                   while (rs.next()) {
+                       OrderProduct retOrderProduct = new OrderProduct(rs.getString("id"), rs.getString("order_id"),
+                           rs.getString("product_id"), rs.getInt("quantity"));
+                       retArray.add(retOrderProduct);
+                   }
+               }
+           }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+
+
+        return retArray;
+    }
+
+    public void deleteByOrderId(String id) {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "DELETE FROM order_products WHERE order_id = ?";
+            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, id);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+
     }
 }
