@@ -24,7 +24,8 @@ create table products (
 	id varchar(40) primary key,
 	name varchar(64) not null,
 	category varchar(52) not null,
-	price integer not null
+	price integer not null,
+    in_stock integer not null
 );
 
 create table orders (
