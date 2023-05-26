@@ -1,7 +1,10 @@
 package com.revature.ecommerce_cli.screens;
 
 import java.util.Scanner;
+
+import com.revature.ecommerce_cli.services.RouterService;
 import com.revature.ecommerce_cli.services.UserService;
+import com.revature.ecommerce_cli.models.Session;
 import com.revature.ecommerce_cli.models.User;
 import lombok.AllArgsConstructor;
 import java.util.Optional;
@@ -9,6 +12,10 @@ import java.util.Optional;
 @AllArgsConstructor
 public class LoginScreen implements IScreen{
     private final UserService userService;
+    private final RouterService routerService;
+    private Session session;
+
+    
 
     @Override
     public void start(Scanner scan) {
@@ -42,10 +49,8 @@ public class LoginScreen implements IScreen{
                    
                     continue;
                 } 
-                    // System.out.println("\nLogin successful. Welcome, "+ username + "!");
-                    // scan.nextLine();
-                    break exit;
-                
+                    session.setSession(user.get());
+                    routerService.navigate("/menu", scan);
             }
         }
     }
