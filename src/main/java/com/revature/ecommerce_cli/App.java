@@ -9,5 +9,6 @@ public class App {
     Scanner scan = new Scanner(System.in);
     RouterService router = new RouterService();
     router.navigate("/home", scan);
+    scan.close();
   }
 }
