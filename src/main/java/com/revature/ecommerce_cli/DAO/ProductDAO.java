@@ -13,18 +13,18 @@ import java.util.Optional;
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.util.ConnectionFactory;
 
-// This is the chef
 public class ProductDAO implements CrudDAO<Product> {
 
     @Override
     public void save(Product obj) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "INSERT INTO products (id, name, category, price) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO products (id, name, category, price, in_stock) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, obj.getId());
                 ps.setString(2, obj.getName());
                 ps.setString(3, obj.getCategory());
                 ps.setInt(4, obj.getPrice());
+                ps.setInt(5, obj.getInStock());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -42,12 +42,13 @@ public class ProductDAO implements CrudDAO<Product> {
     @Override
     public void update(Product updater) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "UPDATE products set name = ?, category = ?, price = ? where id = ?";
+            String sql = "UPDATE products set name = ?, category = ?, price = ?, in_stock = ? where id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, updater.getName());
                 ps.setString(2, updater.getCategory());
                 ps.setInt(3, updater.getPrice());
-                ps.setString(4, updater.getId());
+                ps.setInt(4, updater.getInStock());
+                ps.setString(5, updater.getId());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -97,6 +98,7 @@ public class ProductDAO implements CrudDAO<Product> {
                         product.setName(rs.getString("name"));
                         product.setCategory(rs.getString("category"));
                         product.setPrice(rs.getInt("price"));
+                        product.setInStock(rs.getInt("in_stock"));
                         return Optional.of(product);
                     }
                 }
@@ -123,7 +125,7 @@ public class ProductDAO implements CrudDAO<Product> {
             try(ResultSet rs = s.executeQuery("select * from products")) {
                 while(rs.next()) {
                     Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                        rs.getString("category"), rs.getInt("price"));
+                        rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
                     retArray.add(retProduct);
                 }
             }
@@ -151,7 +153,7 @@ public class ProductDAO implements CrudDAO<Product> {
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
                         Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                            rs.getString("category"), rs.getInt("price"));
+                            rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
                         retArray.add(retProduct);
                     }
                 }
@@ -180,7 +182,7 @@ public class ProductDAO implements CrudDAO<Product> {
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
                         Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                            rs.getString("category"), rs.getInt("price"));
+                            rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
                         retArray.add(retProduct);
                     }
                 }
@@ -209,7 +211,7 @@ public class ProductDAO implements CrudDAO<Product> {
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
                         Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                            rs.getString("category"), rs.getInt("price"));
+                            rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
                         retArray.add(retProduct);
                     }
                 }
