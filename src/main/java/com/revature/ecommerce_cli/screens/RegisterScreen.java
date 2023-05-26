@@ -1,8 +1,11 @@
 package com.revature.ecommerce_cli.screens;
 
 import java.util.Scanner;
+
+import com.revature.ecommerce_cli.services.RouterService;
 import com.revature.ecommerce_cli.services.UserService;
 import com.revature.ecommerce_cli.models.User;
+import com.revature.ecommerce_cli.models.Session;
 
 import lombok.AllArgsConstructor;
 
@@ -10,6 +13,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RegisterScreen implements IScreen{
     private final UserService userService;
+    private final RouterService routerService;
+    private Session session;
 
     @Override
     public void start(Scanner scan) {
@@ -51,6 +56,9 @@ public class RegisterScreen implements IScreen{
                 switch(scan.nextLine()){
                     case "y":
                     User newUser = userService.register(username, password);
+                    //session = new Session();
+                    session.setSession(newUser);
+                    routerService.navigate("/menu", scan);
                     break;
                     case "n":
                         clearScreen();
@@ -68,7 +76,7 @@ public class RegisterScreen implements IScreen{
                 }
 
                 //break out if info is correct
-                break exit; //remove later for switch
+                break exit; 
             }
 
 
@@ -106,7 +114,7 @@ public String getUsername(Scanner scan){
 
     if(!userService.isUniqueUsername(username)){
         clearScreen();
-        System.out.println("Username must be unique!");
+        System.out.println("Sorry that username is taken! Try again: ");
         System.out.println("\nPress enter to continue...");
         scan.nextLine();
         continue;

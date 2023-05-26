@@ -39,6 +39,25 @@ public class UserService {
         return false;
     }
 
+    public Optional<User> login(String username, String password){
+
+        //query db for presence of username
+        Optional<User> user = userDao.findByUsername(username);
+        
+        if(user.isEmpty()){
+            return Optional.empty();
+        }
+        boolean isMatched = BCrypt.checkpw(password, user.get().getPassword());
+
+            if(isMatched){
+                return user;
+            }
+            return Optional.empty();
+        }
+
+
+    
+
     public boolean isValidPassword(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
     }
