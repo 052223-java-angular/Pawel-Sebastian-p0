@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS payment_methods cascade;
 create table users (
 	id varchar(40) primary key,
 	username varchar(24) not null unique,
-	password varchar(24) not null
+	password text not null
 );
 
 create table products (
