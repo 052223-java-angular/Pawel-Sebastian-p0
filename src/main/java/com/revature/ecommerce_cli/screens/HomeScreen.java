@@ -29,7 +29,7 @@ public HomeScreen(RouterService router){
                 System.out.println("[2] Register screen");
                 System.out.println("[x] Exit");
 
-                System.out.println("\nEnter:");
+                System.out.print("\nEnter:");
 
                 input = scan.nextLine();
 

@@ -194,7 +194,7 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
     public List<CartItem> findCartItemsByUserId(String userId) {
         List<CartItem> retArray = new ArrayList<CartItem>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "SELECT product_id, products.name as product_name, quantity, " +
+            String sql = "SELECT cart_products.id as cart_product_id, products.name as product_name, quantity, " +
                 "products.price as unit_price, in_stock FROM cart_products join products on product_id = " +
                 "products.id where cart_products.user_id = ?";
 
@@ -203,7 +203,7 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        CartItem retCartItem = new CartItem(rs.getString("product_id"),
+                        CartItem retCartItem = new CartItem(rs.getString("cart_product_id"),
                             rs.getString("product_name"), rs.getInt("quantity"), rs.getInt("unit_price"),
                             rs.getInt("in_stock"));
                         retArray.add(retCartItem);
@@ -219,5 +219,6 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
             System.out.println("couldn't find postgres driver for jdbc");
             throw new RuntimeException(e.getMessage());
         }
+        return retArray;
     }
 }
