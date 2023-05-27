@@ -10,6 +10,13 @@ import lombok.AllArgsConstructor;
 public class CartProductService {
     private final CartProductDAO cartProductDAO;
 
+    public void deleteById(String id) {
+        cartProductDAO.delete(id);
+    }
+    public void updateQuantityById(String id, int quantity) {
+        cartProductDAO.updateQuantityById(id, quantity);
+    }
+
     public List<CartItem> getCartItemsByUserId(String userId) {
         return cartProductDAO.findCartItemsByUserId(userId);
     }

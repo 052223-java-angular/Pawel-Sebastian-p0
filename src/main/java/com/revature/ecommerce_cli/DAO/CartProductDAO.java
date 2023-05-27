@@ -191,6 +191,7 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         }
 
     }
+
     public List<CartItem> findCartItemsByUserId(String userId) {
         List<CartItem> retArray = new ArrayList<CartItem>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
@@ -220,5 +221,24 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
             throw new RuntimeException(e.getMessage());
         }
         return retArray;
+    }
+
+    public void updateQuantityById (String id, int quantity) {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "UPDATE cart_products set quantity = ? where id = ?";
+            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, quantity);
+                ps.setString(2, id);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
