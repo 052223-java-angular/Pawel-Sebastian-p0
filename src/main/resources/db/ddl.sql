@@ -50,7 +50,7 @@ create table cart_products(
 	user_id varchar(40),
 	product_id varchar(40),
 	quantity integer not null,
-	foreign key (user_id) references orders(id),
+	foreign key (user_id) references users(id),
 	foreign key (product_id) references products(id)
 );
 

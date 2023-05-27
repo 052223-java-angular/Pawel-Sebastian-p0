@@ -59,7 +59,7 @@ public class RegisterScreen implements IScreen{
                     //session = new Session();
                     session.setSession(newUser);
                     routerService.navigate("/menu", scan);
-                    break;
+                    break exit;
                     case "n":
                         clearScreen();
                         System.out.println("\nRestarting process:");

@@ -51,6 +51,7 @@ public class LoginScreen implements IScreen{
                 } 
                     session.setSession(user.get());
                     routerService.navigate("/menu", scan);
+                    return;
             }
         }
     }

@@ -5,11 +5,13 @@ import com.revature.ecommerce_cli.screens.HomeScreen;
 import com.revature.ecommerce_cli.screens.MenuScreen;
 import com.revature.ecommerce_cli.screens.LoginScreen;
 import com.revature.ecommerce_cli.screens.RegisterScreen;
+import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 import com.revature.ecommerce_cli.models.Session;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import com.revature.ecommerce_cli.DAO.UserDAO;
+import com.revature.ecommerce_cli.DAO.CartProductDAO;
 import java.util.Scanner;
 //returns screen 
 
@@ -29,8 +31,12 @@ public class RouterService {
             case "/login":
                 new LoginScreen(getUserService(), this, session).start(scan);
                 break;
+            case "/shopping_cart":
+                new ShoppingCartScreen(getCartProductService(), session).start(scan);
+                
+            break;
             case "/menu":
-                new MenuScreen(session).start(scan);
+                new MenuScreen(session, this).start(scan);
                 
             break;
             case "/register":
@@ -45,6 +51,12 @@ public class RouterService {
 private UserService getUserService(){
 
     return new UserService(new UserDAO());
+
+}
+
+private CartProductService getCartProductService(){
+
+    return new CartProductService(new CartProductDAO());
 
 }
 

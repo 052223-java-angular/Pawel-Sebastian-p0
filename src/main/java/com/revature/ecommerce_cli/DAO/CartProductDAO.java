@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.revature.ecommerce_cli.models.CartProduct;
+import com.revature.ecommerce_cli.DTO.CartItem;
 import com.revature.ecommerce_cli.util.ConnectionFactory;
 
 // This is the chef
@@ -189,5 +190,55 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
             throw new RuntimeException(e.getMessage());
         }
 
+    }
+
+    public List<CartItem> findCartItemsByUserId(String userId) {
+        List<CartItem> retArray = new ArrayList<CartItem>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT cart_products.id as cart_product_id, products.name as product_name, quantity, " +
+                "products.price as unit_price, in_stock FROM cart_products join products on product_id = " +
+                "products.id where cart_products.user_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, userId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        CartItem retCartItem = new CartItem(rs.getString("cart_product_id"),
+                            rs.getString("product_name"), rs.getInt("quantity"), rs.getInt("unit_price"),
+                            rs.getInt("in_stock"));
+                        retArray.add(retCartItem);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+        return retArray;
+    }
+
+    public void updateQuantityById (String id, int quantity) {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "UPDATE cart_products set quantity = ? where id = ?";
+            try(PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, quantity);
+                ps.setString(2, id);
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
