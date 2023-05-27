@@ -1,0 +1,15 @@
+INSERT INTO ecommerce_cli.products (id,"name",category,price,in_stock) VALUES
+	 ('blah','hairbrush','beauty',600,122),
+	 ('tine','comb','beauty',300,22),
+	 ('brassy','trombone','instruments',50000,3),
+	 ('high','trumpet','instruments',60000,6),
+	 ('twangy','banjo','intsruments',40000,888),
+	 ('string','guitar','instruments',60099,999),
+	 ('bowed','violin','instruments',90000,4),
+	 ('cold','ice cream','food',599,20),
+	 ('savory','steak','food',1299,5),
+	 ('snack','chips','food',399,8),
+	 ('energy','coffee','food',1099,6),
+	 ('old','pacman','video games',2099,555),
+	 ('new','Breath of the Wild','video games',6999,3444),
+	 ('mid','Ocarina of Time','video games',1999,5);

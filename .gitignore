@@ -33,3 +33,5 @@ target/
 
 *.DS_Store
 .vscode/
+
+src/main/resources/db/users_dml.sql
