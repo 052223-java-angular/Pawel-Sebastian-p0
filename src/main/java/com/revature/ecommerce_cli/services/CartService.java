@@ -7,7 +7,7 @@ import com.revature.ecommerce_cli.DTO.CartItem;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class CartProductService {
+public class CartService {
     private final CartProductDAO cartProductDAO;
 
     public void deleteById(String id) {

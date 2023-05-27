@@ -155,12 +155,12 @@ public class OrderDAO implements CrudDAO<Order> {
     public List<Order> findByUserId(String userId) {
         List<Order> retArray = new ArrayList<Order>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from orders where user_id = ?";
+            String sql = "select * from orders where user_id = ? order by time_placed";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, userId);
 
-                try(ResultSet rs = ps.executeQuery(sql)) {
+                try(ResultSet rs = ps.executeQuery()) {
                     while(rs.next()) {
                         Order retOrder = new Order(rs.getString("id"), rs.getString("user_id"),
                             rs.getInt("amount"), fromTimestamp(rs.getTimestamp("time_placed")));

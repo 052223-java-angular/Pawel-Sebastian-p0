@@ -28,6 +28,7 @@ public class MenuScreen implements IScreen {
                 clearScreen();
                 System.out.println("Welcome to the menu screen " + session.getUsername() + " !");
                 System.out.println("\n[1] Shopping Cart");
+                System.out.println("[2] Order History");
                 System.out.println("\n[x] Exit");
                 System.out.print("\nEnter: ");
                 input = scan.nextLine();
@@ -35,6 +36,10 @@ public class MenuScreen implements IScreen {
                     case "1":
                         logger.info("Navigating to Shopping Cart");
                         router.navigate("/shopping_cart", scan);
+                        break;
+                    case "2":
+                        logger.info("Navigating to Order History");
+                        router.navigate("/order_history", scan);
                         break;
                     case "x":
                         logger.info("user sign out");

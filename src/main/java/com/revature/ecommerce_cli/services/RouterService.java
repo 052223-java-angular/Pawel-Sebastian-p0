@@ -1,17 +1,19 @@
 package com.revature.ecommerce_cli.services;
 
-import com.revature.ecommerce_cli.models.User;
 import com.revature.ecommerce_cli.screens.HomeScreen;
 import com.revature.ecommerce_cli.screens.MenuScreen;
 import com.revature.ecommerce_cli.screens.LoginScreen;
+import com.revature.ecommerce_cli.screens.OrderHistoryScreen;
 import com.revature.ecommerce_cli.screens.RegisterScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 import com.revature.ecommerce_cli.models.Session;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import com.revature.ecommerce_cli.DAO.UserDAO;
 import com.revature.ecommerce_cli.DAO.CartProductDAO;
+import com.revature.ecommerce_cli.DAO.OrderDAO;
+import com.revature.ecommerce_cli.DAO.OrderProductDAO;
+
 import java.util.Scanner;
 //returns screen 
 
@@ -32,7 +34,11 @@ public class RouterService {
                 new LoginScreen(getUserService(), this, session).start(scan);
                 break;
             case "/shopping_cart":
-                new ShoppingCartScreen(getCartProductService(), session).start(scan);
+                new ShoppingCartScreen(getCartService(), session).start(scan);
+
+            break;
+            case "/order_history":
+                new OrderHistoryScreen(getOrderHistoryService(), session).start(scan);
                 
             break;
             case "/menu":
@@ -54,9 +60,15 @@ private UserService getUserService(){
 
 }
 
-private CartProductService getCartProductService(){
+private OrderHistoryService getOrderHistoryService(){
 
-    return new CartProductService(new CartProductDAO());
+    return new OrderHistoryService(new OrderDAO(), new OrderProductDAO());
+
+}
+
+private CartService getCartService(){
+
+    return new CartService(new CartProductDAO());
 
 }
 
