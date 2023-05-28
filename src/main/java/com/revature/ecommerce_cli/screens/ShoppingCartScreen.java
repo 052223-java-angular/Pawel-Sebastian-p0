@@ -64,7 +64,6 @@ public class ShoppingCartScreen implements IScreen{
                         break exit;
                     default:
                         logger.warn("Invalid Shopping cart menu option!");
-                        clearScreen();
                         System.out.println("Invalid option!");
                         System.out.print("\nPress enter to continue");
                         scan.nextLine();
@@ -101,10 +100,8 @@ public class ShoppingCartScreen implements IScreen{
         String input = "";
         CartItem removed;
         int productSelect;
-        clearScreen();
         redrawCart(cartItems);
         while (true) {
-            redrawCart(cartItems);
             System.out.print("\n Enter ID of product to remove (x to cancel): ");
             input = scan.nextLine().toLowerCase();
             if(input.equals("x")) return;
@@ -119,7 +116,7 @@ public class ShoppingCartScreen implements IScreen{
                 continue;
             }
             removed = cartItems.get(productSelect - 1);
-            System.out.print("Enter 'y' to confirm delete " + removed.getProductName() + ": ");
+            System.out.print(" Enter 'y' to confirm delete " + removed.getProductName() + ": ");
             input = scan.nextLine().toLowerCase();
             if(input.equals("y")) break;
         }
@@ -150,12 +147,13 @@ public class ShoppingCartScreen implements IScreen{
                 System.out.println("invalid ID entered");
                 System.out.println(e.getMessage());
                 logger.info("invalid ID when modifying item quantity in cart");
+                shouldRedraw = false;
                 continue outer;
             }
             CartItem edited = cartItems.get(inInt - 1);
             int quantityIn;
             inner: while (true) {
-                System.out.print("\n Enter new quantity for " + edited.getProductName() + ": ");
+                System.out.print("\n Enter new quantity for " + edited.getProductName() + "(x to cancel): ");
                 input = scan.nextLine().toLowerCase();
                 if(input.equals("x")) return;
                 try {
@@ -172,7 +170,7 @@ public class ShoppingCartScreen implements IScreen{
             }
             String cartProductId = edited.getCartProductId();
             if(quantityIn == 0) {
-                System.out.print("Enter 'y' to confirm delete " + edited.getProductName() + ": ");
+                System.out.print(" Enter 'y' to confirm delete " + edited.getProductName() + ": ");
                 input = scan.nextLine().toLowerCase();
                 if(!input.equals("y")) {
                     shouldRedraw = false;
