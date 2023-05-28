@@ -86,8 +86,8 @@ public void productSearch(Scanner scan, String input){
     
     
         while(true){
-        System.out.println("Searching by Product Name ");
-        System.out.println("\nEnter Product Name: ");
+        System.out.println("-Searching by Product Name ");
+        System.out.println("\n-Enter Product Name:\n  ");
         input = scan.nextLine().trim();
         if(input.isEmpty()){
             System.out.println("Product name can not be empty, please enter a valid product name.");
@@ -100,9 +100,12 @@ public void productSearch(Scanner scan, String input){
             continue;
         }
         else{
-            System.out.println("Products found: ");
+            System.out.println("\n-Products found (x to go back): \n ");
+            System.out.printf("%-20s %-15s %-10s %-10s %-20s%n",  "Name:", "Category:", "Price", "In Stock", "Description");
             for(Product product : products){
-                System.out.println(product);
+                System.out.printf("%-20s %-15s %-10d %-10d %-20s%n", product.getName(), 
+                product.getCategory(), product.getPrice(), product.getInStock(), 
+                product.getDescription());
                 scan.nextLine();
             }
         }
