@@ -7,6 +7,7 @@ import com.revature.ecommerce_cli.screens.MenuScreen;
 import com.revature.ecommerce_cli.screens.ProductScreen;
 import com.revature.ecommerce_cli.screens.LoginScreen;
 import com.revature.ecommerce_cli.screens.RegisterScreen;
+import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
@@ -49,6 +50,8 @@ public class RouterService {
             break;
             case "/browsing":
                 new BrowsingScreen(getProductService(), this, session).start(scan);
+            case "/searching":
+                new SearchingScreen(session, this, getProductService()).start(scan);
             
         break;
         }

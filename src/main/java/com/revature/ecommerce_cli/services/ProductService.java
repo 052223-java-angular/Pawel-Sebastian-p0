@@ -15,6 +15,11 @@ public class ProductService {
     public List<Product> getAll() {
         return productDAO.findAll();
     }
+
+
+    public List<Product> searchProductByName(String input) {
+        return productDAO.findByName(input);
+    }
    
 
     
