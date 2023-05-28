@@ -119,6 +119,8 @@ public class ShoppingCartScreen implements IScreen{
             System.out.print(" Enter 'y' to confirm delete " + removed.getProductName() + ": ");
             input = scan.nextLine().toLowerCase();
             if(input.equals("y")) break;
+            System.out.println("\n Remove Cancelled");
+            logger.info("remove cart item cancelled");
         }
         String cartProductId = removed.getCartProductId();
         cartService.deleteById(cartProductId);
@@ -153,7 +155,7 @@ public class ShoppingCartScreen implements IScreen{
             CartItem edited = cartItems.get(inInt - 1);
             int quantityIn;
             inner: while (true) {
-                System.out.print("\n Enter new quantity for " + edited.getProductName() + "(x to cancel): ");
+                System.out.print("\n Enter new quantity for " + edited.getProductName() + " (x to cancel): ");
                 input = scan.nextLine().toLowerCase();
                 if(input.equals("x")) return;
                 try {
@@ -170,18 +172,18 @@ public class ShoppingCartScreen implements IScreen{
             }
             String cartProductId = edited.getCartProductId();
             if(quantityIn == 0) {
-                System.out.print(" Enter 'y' to confirm delete " + edited.getProductName() + ": ");
+                System.out.print(" Enter 'y' to confirm remove " + edited.getProductName() + ": ");
                 input = scan.nextLine().toLowerCase();
                 if(!input.equals("y")) {
                     shouldRedraw = false;
                     redrawCart(cartItems);
-                    System.out.println("\n Delete Cancelled");
+                    System.out.println("\n Remove Cancelled");
                     logger.info("set Cart item quantity to 0 cancelled");
                     continue outer;}
                 cartService.deleteById(cartProductId);
                 cartItems.remove(inInt - 1);
                 logger.info("deleted CartProduct id + " + cartProductId);
-                System.out.println("Deleted " + edited.getProductName() + " from Cart");
+                System.out.println("Removed " + edited.getProductName() + " from Cart");
                 System.out.print("\n press Enter to continue ");
                 scan.nextLine();
                 return;
