@@ -224,7 +224,7 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
     public List<OrderItem> findOrderItemsByOrderId(String orderId) {
         List<OrderItem> retArray = new ArrayList<OrderItem>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "SELECT order_products.id as order_product_id, products.name as product_name, quantity, "
+            String sql = "SELECT products.id as product_id, products.name as product_name, quantity, "
                 + " products.price as unit_price, in_stock FROM order_products join products on product_id = " +
                 "products.id where order_products.order_id = ?";
 
@@ -233,7 +233,7 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        OrderItem retCartItem = new OrderItem(rs.getString("order_product_id"),
+                        OrderItem retCartItem = new OrderItem(rs.getString("product_id"),
                             rs.getString("product_name"), rs.getInt("quantity"), rs.getInt("unit_price"));
                         retArray.add(retCartItem);
                     }

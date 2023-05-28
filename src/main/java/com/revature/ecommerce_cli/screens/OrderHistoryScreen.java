@@ -8,6 +8,8 @@ import java.util.List;
 import java.text.DateFormat;
 import java.lang.IndexOutOfBoundsException;
 import com.revature.ecommerce_cli.services.OrderHistoryService;
+import com.revature.ecommerce_cli.services.RouterService;
+import com.revature.ecommerce_cli.services.ProductService;
 import com.revature.ecommerce_cli.DTO.OrderItem;
 import com.revature.ecommerce_cli.models.Session;
 import com.revature.ecommerce_cli.models.Order;
@@ -18,7 +20,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class OrderHistoryScreen implements IScreen{
     private final OrderHistoryService orderHistoryService;
+    private final ProductService productService;
     private Session session;
+    RouterService router;
     private static final Logger logger = LogManager.getLogger(OrderHistoryScreen.class);
 
     @Override
@@ -50,7 +54,7 @@ public class OrderHistoryScreen implements IScreen{
             } catch (Exception e) {
                 System.out.println("invalid ID entered");
                 System.out.println(e.getMessage());
-                logger.info("invalid ID when modifying item quantity in cart");
+                logger.info("invalid ID when selecting order");
                 continue;
             }
             redrawOrderItems(orders.get(orderSelect - 1), scan);
@@ -58,23 +62,44 @@ public class OrderHistoryScreen implements IScreen{
    }
 
     private void redrawOrderItems(Order thisOrder, Scanner scan) {
+        String input = "";
         logger.info("Navigated to Order Details Screen");
         List<OrderItem> orderItems = orderHistoryService.getOrderItemsByOrderId(thisOrder.getId());
-        clearScreen();
-        logger.info("redrawing order items");
-        System.out.printf("%-40s %9s %8s %16s\n", "Product Name", "Unit Price", "Quantity",
-            "Total Price");
-        for (OrderItem item : orderItems) {
-            int price = item.getUnitPrice();
-            int quantity = item.getQuantity();
-            int linePrice = price*quantity;
-            System.out.printf("%-40s %9s %8s %16s\n", item.getProductName(),
-                PriceUtil.centsToString(price), quantity, PriceUtil.centsToString(linePrice));
+        while (true) {
+            clearScreen();
+            logger.info("redrawing order items");
+            System.out.printf("%-35s %9s %8s %16s %5s\n", "Product Name", "Unit Price", "Quantity",
+                "Total Price", "ID");
+            int countItem = 1;
+            for (OrderItem item : orderItems) {
+                int price = item.getUnitPrice();
+                int quantity = item.getQuantity();
+                long linePrice = price*(long)quantity;
+                System.out.printf("%-35s %9s %8s %16s %5d\n", item.getProductName(),
+                    PriceUtil.centsToString(price), quantity, PriceUtil.centsToString(linePrice), countItem);
+                ++countItem;
+            }
+            System.out.println("==============================================================");
+            System.out.println("Total: " + PriceUtil.centsToString(thisOrder.getAmount()));
+            int productSelect;
+            System.out.print("\n Enter Product ID to go to Product, Press Enter to return to Orders: ");
+            input = scan.nextLine().toLowerCase();
+            if(input.equals("")) return;
+            try {
+                productSelect = Integer.parseInt(input);
+                if(productSelect < 1 || productSelect > orderItems.size())
+                    throw new IndexOutOfBoundsException("ID out of range");
+            } catch (Exception e) {
+                System.out.println("invalid ID entered");
+                System.out.println(e.getMessage());
+                logger.info("invalid ID when selecting product");
+                System.out.print("\nPress Enter: ");
+                scan.nextLine();
+                continue;
+            }
+            router.navigate("/product", scan,
+                productService.getById(orderItems.get(productSelect - 1).getProductId()));
         }
-        System.out.println("==============================================================");
-        System.out.println("Total: " + PriceUtil.centsToString(thisOrder.getAmount()));
-        System.out.print("Press enter to continue: ");
-        scan.nextLine();
     }
 
     private void clearScreen() {

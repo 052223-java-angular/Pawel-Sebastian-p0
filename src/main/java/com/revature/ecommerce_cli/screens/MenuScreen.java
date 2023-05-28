@@ -29,7 +29,7 @@ public class MenuScreen implements IScreen {
                 System.out.println("Welcome to the menu screen " + session.getUsername() + " !");
                 System.out.println("\n[1] Shopping Cart");
                 System.out.println("[2] Order History");
-                System.out.println("[3]Browse Products");
+                System.out.println("[3] Browse Products");
 
                 System.out.println("\n[x] Exit");
                 System.out.print("\nEnter: ");

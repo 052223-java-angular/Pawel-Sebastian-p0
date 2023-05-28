@@ -44,7 +44,7 @@ public class RouterService {
 
             break;
             case "/order_history":
-                new OrderHistoryScreen(getOrderHistoryService(), session).start(scan);
+                new OrderHistoryScreen(getOrderHistoryService(), getProductService(), session, this).start(scan);
                 
             break;
             case "/menu":
