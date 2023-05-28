@@ -22,7 +22,8 @@ public class ProductScreen implements IScreen{
         System.out.println("Product: " + product.getName() + "\n Price: " 
         + product.getPrice() + "\nCategory: " 
         + product.getCategory() + "\nIn Stock: " 
-        + product.getInStock() + "\n");
+        + product.getInStock() + "\nDescription: "
+        + product.getDescription() + "\n");
         
         System.out.println("[x] Exit");
         System.out.print("\nEnter: ");

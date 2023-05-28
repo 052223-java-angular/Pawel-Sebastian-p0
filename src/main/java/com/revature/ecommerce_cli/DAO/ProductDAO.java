@@ -18,13 +18,15 @@ public class ProductDAO implements CrudDAO<Product> {
     @Override
     public void save(Product obj) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "INSERT INTO products (id, name, category, price, in_stock) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO products (id, name, category, price, in_stock, description)" + 
+                " VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, obj.getId());
                 ps.setString(2, obj.getName());
                 ps.setString(3, obj.getCategory());
                 ps.setInt(4, obj.getPrice());
                 ps.setInt(5, obj.getInStock());
+                ps.setString(6, obj.getDescription());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -42,13 +44,15 @@ public class ProductDAO implements CrudDAO<Product> {
     @Override
     public void update(Product updater) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "UPDATE products set name = ?, category = ?, price = ?, in_stock = ? where id = ?";
+            String sql = "UPDATE products set name = ?, category = ?, price = ?, in_stock = ?, description = ?" +
+            " where id = ?";
             try(PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, updater.getName());
                 ps.setString(2, updater.getCategory());
                 ps.setInt(3, updater.getPrice());
                 ps.setInt(4, updater.getInStock());
-                ps.setString(5, updater.getId());
+                ps.setString(5, updater.getDescription());
+                ps.setString(6, updater.getId());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -99,6 +103,7 @@ public class ProductDAO implements CrudDAO<Product> {
                         product.setCategory(rs.getString("category"));
                         product.setPrice(rs.getInt("price"));
                         product.setInStock(rs.getInt("in_stock"));
+                        product.setDescription(rs.getString("description"));
                         return Optional.of(product);
                     }
                 }
@@ -124,9 +129,7 @@ public class ProductDAO implements CrudDAO<Product> {
             Statement s = conn.createStatement();
             try(ResultSet rs = s.executeQuery("select * from products")) {
                 while(rs.next()) {
-                    Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                        rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
-                    retArray.add(retProduct);
+                    retArray.add(getFromResultSet(rs));
                 }
             }
         } catch (SQLException e) {
@@ -152,9 +155,7 @@ public class ProductDAO implements CrudDAO<Product> {
 
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
-                        Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                            rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
-                        retArray.add(retProduct);
+                        retArray.add(getFromResultSet(rs));
                     }
                 }
             }
@@ -181,9 +182,7 @@ public class ProductDAO implements CrudDAO<Product> {
                 ps.setInt(2, second);
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
-                        Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                            rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
-                        retArray.add(retProduct);
+                        retArray.add(getFromResultSet(rs));
                     }
                 }
             }
@@ -210,9 +209,7 @@ public class ProductDAO implements CrudDAO<Product> {
 
                 try(ResultSet rs = ps.executeQuery(sql)) {
                     while(rs.next()) {
-                        Product retProduct = new Product(rs.getString("id"), rs.getString("name"),
-                            rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"));
-                        retArray.add(retProduct);
+                        retArray.add(getFromResultSet(rs));
                     }
                 }
             }
@@ -227,6 +224,12 @@ public class ProductDAO implements CrudDAO<Product> {
         }
 
         return retArray;
+    }
+
+    private static final Product getFromResultSet(ResultSet rs) throws SQLException {
+        return new Product(rs.getString("id"), rs.getString("name"),
+            rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"),
+            rs.getString("description"));
     }
 
 }
