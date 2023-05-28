@@ -75,11 +75,7 @@ public class SearchingScreen implements IScreen {
     }
 
 
-    private void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        }
-
+    
 
 //--------------------------------------Helper Methods ---------------------------------------
 
@@ -102,14 +98,24 @@ public void productSearch(Scanner scan, String input){
             continue;
         }
         else{
-            System.out.println("\n-Products found (x to go back): \n ");
-            System.out.printf("%-20s %-15s %-10s %-10s %-20s%n",  "Name:", "Category:", "Price", "In Stock", "Description");
-            for(Product product : products){
-                System.out.printf("%-20s %-15s %-10d %-10d %-20s%n", product.getName(), 
+            clearScreen();
+            System.out.println("\n-Products found:");
+            System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
+            
+            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item #" , "Name:", "Category:", "Price", "In Stock", "Description");
+            for(int i = 0; i < products.size(); i++){
+                Product product = products.get(i);
+                System.out.printf("%-5d  %-20s %-15s %-10d %-10d 1%-20s%n", i +1, product.getName(), 
                 product.getCategory(), product.getPrice(), product.getInStock(), 
                 product.getDescription());
-                scan.nextLine();
+                input = scan.nextLine();
+                if(input.equals("x")){
+                    break;
+                }
+                
+                
             }
+            getProductPage(scan, input, products);
         }
         break;
     }
@@ -127,11 +133,20 @@ public List<Product> searchProductByName(String input){
 
 public void categorySearch(Scanner scan, String input){
 
-    
+    List<String> categoryList = productService.allCategories();
 
     while(true){
         System.out.println("-Searching by Product Category ");
+
+        System.out.println("\n-Product Categories: \n");
+        for(int i = 0; i < categoryList.size(); i++){
+            System.out.println("[" + (i+1) + "] " + categoryList.get(i));
+        }
         System.out.println("\n-Enter Product Category:\n  ");
+
+
+
+        
         input = scan.nextLine().trim();
         if(input.isEmpty()){
             System.out.println("Product category can not be empty, please enter a valid product category.");
@@ -144,6 +159,7 @@ public void categorySearch(Scanner scan, String input){
             continue;
         }
         else{
+            clearScreen();
             System.out.println("\n-Products found (x to go back): \n ");
             System.out.printf("%-20s %-15s %-10s %-10s %-20s%n",  "Name:", "Category:", "Price", "In Stock", "Description");
             
@@ -165,6 +181,29 @@ public void categorySearch(Scanner scan, String input){
         
     }
 
+public void getProductPage(Scanner scan, String input, List<Product> products){
+    
+        int productNum;
+        try {
+            productNum = Integer.parseInt(input);
+        } catch(NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid product number.");
+            return;
+        }
+        if (productNum < 1 || productNum > products.size()) {
+            System.out.println("Invalid product number. Please enter a number between 1 and " + products.size() + ".");
+            return;
+        }
+    
+        Product selectedProduct = products.get(productNum - 1);
+    
+        // Navigate to product screen
+        router.navigate("/product", scan, selectedProduct);
+    }
+    
+
+        
+
     
 
 public List<Product> searchProductByCategory(String input){
@@ -178,6 +217,12 @@ public List<Product> searchProductByCategory(String input){
 
 
 }
+
+private void clearScreen() {
+    System.out.print("\033[H\033[2J");
+    System.out.flush();
+    }
+
 
 }
 

@@ -34,4 +34,8 @@ public class ProductService {
     public List<Product> getByCategory(String category) {
         return productDAO.findByCategory(category);
     }
+
+    public List<String> allCategories() {
+        return productDAO.getAllCategories();
+    }
 }
