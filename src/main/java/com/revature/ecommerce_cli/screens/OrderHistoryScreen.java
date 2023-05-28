@@ -93,7 +93,7 @@ public class OrderHistoryScreen implements IScreen{
                 System.out.println("invalid ID entered");
                 System.out.println(e.getMessage());
                 logger.info("invalid ID when selecting product");
-                System.out.print("\nPress Enter: ");
+                System.out.print("\nPress Enter to continue: ");
                 scan.nextLine();
                 continue;
             }
