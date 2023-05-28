@@ -58,13 +58,13 @@ public class OrderHistoryScreen implements IScreen{
                     logger.info("invalid ID when selecting order");
                     continue inner;
                 }
-                redrawOrderItems(orders.get(orderSelect - 1), scan);
                 break inner;
             }
+            if(getOrderItems(orders.get(orderSelect - 1), scan)) return;
         }
    }
 
-    private void redrawOrderItems(Order thisOrder, Scanner scan) {
+    private boolean getOrderItems(Order thisOrder, Scanner scan) {
         String input = "";
         List<OrderItem> orderItems = orderHistoryService.getOrderItemsByOrderId(thisOrder.getId());
         while (true) {
@@ -89,7 +89,7 @@ public class OrderHistoryScreen implements IScreen{
             inner: while (true) {
                 System.out.print("\n Enter Product ID to go to Product, Press Enter to return to Orders: ");
                 input = scan.nextLine().toLowerCase();
-                if(input.equals("")) return;
+                if(input.equals("")) return false;
                 try {
                     productSelect = Integer.parseInt(input);
                     if(productSelect < 1 || productSelect > orderItems.size())
@@ -103,7 +103,7 @@ public class OrderHistoryScreen implements IScreen{
                 logger.info("Navigating to product screen from Order History");
                 router.navigate("/product", scan,
                     productService.getById(orderItems.get(productSelect - 1).getProductId()));
-                break inner;
+                return true;
             }
         }
     }

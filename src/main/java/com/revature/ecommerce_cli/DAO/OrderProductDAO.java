@@ -226,7 +226,7 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "SELECT products.id as product_id, products.name as product_name, quantity, "
                 + " products.price as unit_price, in_stock, category FROM order_products join products on " + 
-                "product_id = products.id where order_products.order_id = ?";
+                "product_id = products.id where order_products.order_id = ? order by products.name";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, orderId);
