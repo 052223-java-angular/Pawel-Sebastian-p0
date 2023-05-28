@@ -25,8 +25,8 @@ public class ProductDAO implements CrudDAO<Product> {
                 ps.setString(2, obj.getName());
                 ps.setString(3, obj.getCategory());
                 ps.setInt(4, obj.getPrice());
-                ps.setString(5, obj.getDescription());
-                ps.setInt(6, obj.getInStock());
+                ps.setInt(5, obj.getInStock());
+                ps.setString(6, obj.getDescription());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
