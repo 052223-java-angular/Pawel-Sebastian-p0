@@ -128,7 +128,7 @@ public class ShoppingCartScreen implements IScreen{
             cartService.deleteById(cartProductId);
 
             logger.info("deleted CartProduct id + " + cartProductId);
-            System.out.println("Deleted " + edited.getProductName() + "from Cart");
+            System.out.println("Deleted " + edited.getProductName() + " from Cart");
             System.out.print("\n press Enter to continue ");
             scan.nextLine();
             return;
