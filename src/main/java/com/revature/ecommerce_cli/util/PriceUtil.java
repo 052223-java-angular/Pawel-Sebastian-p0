@@ -6,6 +6,11 @@ final public class PriceUtil {
     public static String centsToString(int price) {
         return("$" + Integer.toString(price/100) + "." + String.format("%02d", price%100));
     }
+
+    public static String centsToString (long price) {
+        return("$" + Long.toString(price/100) + "." + String.format("%02d", price%100));
+    }
+
     public static int toCents(String input) throws NumberFormatException {
         int len = input.length();
         int dotPlace = input.indexOf('.');

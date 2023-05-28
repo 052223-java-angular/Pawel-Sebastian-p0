@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import com.revature.ecommerce_cli.models.OrderProduct;
+import com.revature.ecommerce_cli.DTO.OrderItem;
 import com.revature.ecommerce_cli.util.ConnectionFactory;
 
 // This is the chef
@@ -218,6 +219,37 @@ public class OrderProductDAO implements CrudDAO<OrderProduct> {
             System.out.println("couldn't find postgres driver for jdbc");
             throw new RuntimeException(e.getMessage());
         }
-
     }
+
+    public List<OrderItem> findOrderItemsByOrderId(String orderId) {
+        List<OrderItem> retArray = new ArrayList<OrderItem>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT products.id as product_id, products.name as product_name, quantity, "
+                + " products.price as unit_price, in_stock FROM order_products join products on product_id = " +
+                "products.id where order_products.order_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, orderId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        OrderItem retCartItem = new OrderItem(rs.getString("product_id"),
+                            rs.getString("product_name"), rs.getInt("quantity"), rs.getInt("unit_price"));
+                        retArray.add(retCartItem);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+        return retArray;
+    }
+
+
 }
