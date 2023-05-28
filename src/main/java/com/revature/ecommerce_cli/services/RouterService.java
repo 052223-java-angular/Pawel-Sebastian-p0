@@ -57,6 +57,7 @@ public class RouterService {
             break;
             case "/browsing":
                 new BrowsingScreen(getProductService(), this, session).start(scan);
+            break;
             case "/searching":
                 new SearchingScreen(session, this, getProductService()).start(scan);
             

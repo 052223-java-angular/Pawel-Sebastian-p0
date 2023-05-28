@@ -88,7 +88,7 @@ public void productSearch(Scanner scan, String input){
         while(true){
         System.out.println("Searching by Product Name ");
         System.out.println("\nEnter Product Name: ");
-        input = scan.nextLine().trim().toLowerCase();
+        input = scan.nextLine().trim();
         if(input.isEmpty()){
             System.out.println("Product name can not be empty, please enter a valid product name.");
             System.out.println("Enter x to exit:");

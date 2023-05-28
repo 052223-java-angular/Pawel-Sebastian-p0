@@ -40,16 +40,17 @@ public class MenuScreen implements IScreen {
                         router.navigate("/shopping_cart", scan);
                         break;
                     case "2":
-                    logger.info("Navigating to Product Screen");
-                    router.navigate("/browsing", scan);
-                    break;
+                        logger.info("Navigating to Product Screen");
+                        router.navigate("/browsing", scan);
+                        break;
                     case "3":
                         logger.info("Navigating to Searching Screen");
                         router.navigate("/searching", scan);        
+                        break;
                     case "4":
-                    logger.info("Navigating to Order History");
-                    router.navigate("/order_history", scan);
-                    break;
+                        logger.info("Navigating to Order History");
+                        router.navigate("/order_history", scan);
+                        break;
                    
                     case "x":
                         logger.info("user sign out");
