@@ -14,6 +14,8 @@ import com.revature.ecommerce_cli.models.Session;
 import com.revature.ecommerce_cli.services.ProductService;
 import com.revature.ecommerce_cli.services.RouterService;
 import com.revature.ecommerce_cli.util.StringUtil;
+import com.revature.ecommerce_cli.util.PriceUtil;
+
 
 @AllArgsConstructor
 public class SearchingScreen implements IScreen {
@@ -53,6 +55,10 @@ public class SearchingScreen implements IScreen {
                         clearScreen();
                         categorySearch(scan, input);
                         break;
+                    case "3":
+                        clearScreen();
+                        priceSearch(scan, input);
+                        break;
                 
 
                     case "x":
@@ -73,9 +79,6 @@ public class SearchingScreen implements IScreen {
         
 
     }
-
-
-    
 
 //--------------------------------------Helper Methods ---------------------------------------
 
@@ -136,6 +139,7 @@ public void categorySearch(Scanner scan, String input){
     List<String> categoryList = productService.allCategories();
 
     while(true){
+        clearScreen();
         System.out.println("-Searching by Product Category ");
 
         System.out.println("\n-Product Categories: \n");
@@ -143,11 +147,8 @@ public void categorySearch(Scanner scan, String input){
             System.out.println("[" + (i+1) + "] " + categoryList.get(i));
         }
         System.out.println("\n-Enter Product Category:\n  ");
-
-
-
-        
         input = scan.nextLine().trim();
+
         if(input.isEmpty()){
             System.out.println("Product category can not be empty, please enter a valid product category.");
             System.out.println("Enter x to exit:");
@@ -161,10 +162,11 @@ public void categorySearch(Scanner scan, String input){
         else{
             clearScreen();
             System.out.println("\n-Products found (x to go back): \n ");
-            System.out.printf("%-20s %-15s %-10s %-10s %-20s%n",  "Name:", "Category:", "Price", "In Stock", "Description");
+            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item  #", "Name:", "Category:", "Price", "In Stock", "Description");
             
-            for(Product product : products){
-                System.out.printf("%-20s %-15s %-10d %-10d %-20s%n", product.getName(), 
+            for(int i = 0; i < products.size(); i++){   
+                Product product = products.get(i);
+                System.out.printf("%-5d %-20s %-15s %-10d %-10d %-20s%n", i+1, product.getName(), 
                 product.getCategory(), product.getPrice(), product.getInStock(), 
                 product.getDescription());
                 
@@ -176,7 +178,7 @@ public void categorySearch(Scanner scan, String input){
                     
                     break;
             }
-            
+            getProductPage(scan, input, products);
         }
         
     }
@@ -215,6 +217,67 @@ public List<Product> searchProductByCategory(String input){
     return products;
 
 
+
+}
+
+public void priceSearch(Scanner scan, String input){
+    while(true){
+        clearScreen();
+        System.out.println("-Searching by Product Price ");
+        System.out.println("\n-Enter Product Price Lower Bound ($x.xx):\n  ");
+        input = scan.nextLine().trim();
+        double lowerBound = Double.parseDouble(input);
+
+        int lowerBoundCents;
+        try{
+            lowerBoundCents = PriceUtil.toCents(input);
+
+        }catch(NumberFormatException e){
+            System.out.println("Invalid price format (x.xx).");
+            continue;
+        }
+
+        int upperBoundCents;
+
+        System.out.println("\n-Enter Product Price Upper Bound ($x.xx):\n  ");
+        input = scan.nextLine().trim();
+        double upperBound = Double.parseDouble(input);
+        try{
+            upperBoundCents = PriceUtil.toCents(input);
+        }
+        catch(NumberFormatException e){
+            System.out.println("Invalid price format (x.xx).");
+            continue;
+        }
+
+
+        List<Product> products = productService.getByPrice(lowerBoundCents, upperBoundCents);
+        if(products.isEmpty()){
+            System.out.println("No products found with that price, search again: ");
+            continue;
+        }
+        else{
+            clearScreen();
+            System.out.println("\n-Products found:");
+            System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
+            
+            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item #" , "Name:", "Category:", "Price", "In Stock", "Description");
+            for(int i = 0; i < products.size(); i++){
+                Product product = products.get(i);
+                System.out.printf("%-5d  %-20s %-15s %-10d %-10d 1%-20s%n", i +1, product.getName(), 
+                product.getCategory(), product.getPrice(), product.getInStock(), 
+                product.getDescription());
+                input = scan.nextLine();
+                if(input.equals("x")){
+                    break;
+                }
+                
+                
+            }
+            getProductPage(scan, input, products);
+        }
+        break;
+    }
 
 }
 

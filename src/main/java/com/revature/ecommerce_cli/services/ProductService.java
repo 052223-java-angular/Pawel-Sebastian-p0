@@ -38,4 +38,8 @@ public class ProductService {
     public List<String> allCategories() {
         return productDAO.getAllCategories();
     }
+
+    public List<Product> getByPrice(int lowerBound, int upperBound) {
+        return productDAO.findByPriceRange(lowerBound, upperBound);
+    }
 }

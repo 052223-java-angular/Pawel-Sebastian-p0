@@ -14,7 +14,7 @@ final public class PriceUtil {
     public static int toCents(String input) throws NumberFormatException {
         int len = input.length();
         int dotPlace = input.indexOf('.');
-        if(dotPlace != -1 || dotPlace != (len -3)) throw new NumberFormatException();
+        if(dotPlace != -1 && dotPlace != (len -3)) throw new NumberFormatException();
         return Integer.parseInt(input.replaceAll("\\.", ""));
     }
 }
