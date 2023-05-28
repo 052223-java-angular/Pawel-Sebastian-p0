@@ -202,10 +202,10 @@ public class ProductDAO implements CrudDAO<Product> {
     public List<Product> findByCategory(String name) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from products where category ilike '?'";
+            String sql = "select * from products where category ilike ?";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, name);
+                ps.setString(1, "%" + name + "%");
 
                 try(ResultSet rs = ps.executeQuery()) {
                     while(rs.next()) {
