@@ -19,12 +19,15 @@ public class ProductService {
     }
 
 
-    public List<Product> searchProductByName(String input) {
-        return productDAO.findByName(input);
+    public List<Product> searchProductByName(String name) {
+        return productDAO.findByName(name);
     }
    
     public Product getById(String id) {
         Optional<Product> productOpt = productDAO.findById(id);
         return productOpt.orElseThrow(ProductNotFoundException::new);
+    }
+    public List<Product> getByCategory(String category) {
+        return productDAO.findByCategory(category);
     }
 }

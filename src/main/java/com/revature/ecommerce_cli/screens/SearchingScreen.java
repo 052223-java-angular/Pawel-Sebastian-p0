@@ -49,9 +49,11 @@ public class SearchingScreen implements IScreen {
                         clearScreen();
                         productSearch(scan, input);
                         break;
-                    // case "2":
-                    // //placeholder
-                    //     break;
+                    case "2":
+                        clearScreen();
+                        categorySearch(scan, input);
+                        break;
+                
 
                     case "x":
                         
@@ -114,7 +116,6 @@ public void productSearch(Scanner scan, String input){
 
 }
 
-
 public List<Product> searchProductByName(String input){
     List<Product> products = productService.searchProductByName(input);
     if(products.isEmpty()){
@@ -122,6 +123,51 @@ public List<Product> searchProductByName(String input){
         return Collections.emptyList();
     }
     return products;
+}
+
+public void categorySearch(Scanner scan, String input){
+    while(true){
+        System.out.println("-Searching by Product Category ");
+        System.out.println("\n-Enter Product Category:\n  ");
+        input = scan.nextLine().trim();
+        if(input.isEmpty()){
+            System.out.println("Product category can not be empty, please enter a valid product category.");
+            System.out.println("Enter x to exit:");
+            continue;
+        }
+        List<Product> products = searchProductByCategory(input);
+        if(products.isEmpty()){
+            System.out.println("No products found with that category, search again: ");
+            continue;
+        }
+        else{
+            System.out.println("\n-Products found (x to go back): \n ");
+            System.out.printf("%-20s %-15s %-10s %-10s %-20s%n",  "Name:", "Category:", "Price", "In Stock", "Description");
+            for(Product product : products){
+                System.out.printf("%-20s %-15s %-10d %-10d %-20s%n", product.getName(), 
+                product.getCategory(), product.getPrice(), product.getInStock(), 
+                product.getDescription());
+                input = scan.nextLine();
+                
+                    break;
+                
+            }
+        }
+        break;
+    }
+
+    }
+
+public List<Product> searchProductByCategory(String input){
+    List<Product> products = productService.getByCategory(input);
+    if(products.isEmpty()){
+        System.out.println("No products found with that category, ");
+        return Collections.emptyList();
+    }
+    return products;
+
+
+
 }
 }
 
