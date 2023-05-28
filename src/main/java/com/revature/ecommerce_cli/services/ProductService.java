@@ -27,6 +27,10 @@ public class ProductService {
         Optional<Product> productOpt = productDAO.findById(id);
         return productOpt.orElseThrow(ProductNotFoundException::new);
     }
+
+    // public List<String> getAllCategories() {
+    //     return productDAO.findAllCategories();
+    // }
     public List<Product> getByCategory(String category) {
         return productDAO.findByCategory(category);
     }

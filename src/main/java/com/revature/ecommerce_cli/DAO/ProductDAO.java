@@ -226,6 +226,7 @@ public class ProductDAO implements CrudDAO<Product> {
         return retArray;
     }
 
+    
     private static final Product getFromResultSet(ResultSet rs) throws SQLException {
         return new Product(rs.getString("id"), rs.getString("name"),
             rs.getString("category"), rs.getInt("price"), rs.getInt("in_stock"),

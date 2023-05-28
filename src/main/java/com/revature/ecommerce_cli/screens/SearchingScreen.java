@@ -126,6 +126,9 @@ public List<Product> searchProductByName(String input){
 }
 
 public void categorySearch(Scanner scan, String input){
+
+    
+
     while(true){
         System.out.println("-Searching by Product Category ");
         System.out.println("\n-Enter Product Category:\n  ");
@@ -143,20 +146,26 @@ public void categorySearch(Scanner scan, String input){
         else{
             System.out.println("\n-Products found (x to go back): \n ");
             System.out.printf("%-20s %-15s %-10s %-10s %-20s%n",  "Name:", "Category:", "Price", "In Stock", "Description");
+            
             for(Product product : products){
                 System.out.printf("%-20s %-15s %-10d %-10d %-20s%n", product.getName(), 
                 product.getCategory(), product.getPrice(), product.getInStock(), 
                 product.getDescription());
-                input = scan.nextLine();
-                
-                    break;
                 
             }
+            
+                }
+                input = scan.nextLine();
+                if(input.equalsIgnoreCase("x")){    
+                    
+                    break;
+            }
+            
         }
-        break;
+        
     }
 
-    }
+    
 
 public List<Product> searchProductByCategory(String input){
     List<Product> products = productService.getByCategory(input);
@@ -169,5 +178,6 @@ public List<Product> searchProductByCategory(String input){
 
 
 }
+
 }
 
