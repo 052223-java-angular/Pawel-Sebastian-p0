@@ -46,7 +46,7 @@ public class RegisterScreen implements IScreen{
 
                 }
 
-                //confirm user's info
+                //confirm users info
                 clearScreen();
                 System.out.println("Please confirm your credentials.");
                 System.out.println("\nUsername :" + username);
