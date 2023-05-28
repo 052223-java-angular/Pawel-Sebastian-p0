@@ -28,9 +28,9 @@ public class MenuScreen implements IScreen {
                 clearScreen();
                 System.out.println("Welcome to the menu screen " + session.getUsername() + " !");
                 System.out.println("\n[1] Shopping Cart");
-                System.out.println("[2] Order History");
-                System.out.println("[3] Browse Products");
-
+                System.out.println("\n[2] Browse Products");
+                System.out.println("\n[3] Search Products");
+                System.out.println("\n[4] Order History");
                 System.out.println("\n[x] Exit");
                 System.out.print("\nEnter: ");
                 input = scan.nextLine();
@@ -40,13 +40,18 @@ public class MenuScreen implements IScreen {
                         router.navigate("/shopping_cart", scan);
                         break;
                     case "2":
-                        logger.info("Navigating to Order History");
-                        router.navigate("/order_history", scan);
-                        break;
-                    case "3":
                         logger.info("Navigating to Product Screen");
                         router.navigate("/browsing", scan);
                         break;
+                    case "3":
+                        logger.info("Navigating to Searching Screen");
+                        router.navigate("/searching", scan);        
+                        break;
+                    case "4":
+                        logger.info("Navigating to Order History");
+                        router.navigate("/order_history", scan);
+                        break;
+                   
                     case "x":
                         logger.info("user sign out");
                         break exit;
