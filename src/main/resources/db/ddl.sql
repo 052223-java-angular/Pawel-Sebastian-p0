@@ -25,7 +25,8 @@ create table products (
 	name varchar(64) not null,
 	category varchar(52) not null,
 	price integer not null,
-    in_stock integer not null
+    in_stock integer not null,
+    description text not null default ''
 );
 
 create table orders (

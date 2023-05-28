@@ -6,14 +6,14 @@ set search_path to ecommerce_cli;
 -- change the new user's id to 'user1'
 -- run this script
 
-INSERT INTO products (id,"name",category,price,in_stock) VALUES
-	 ('jill','parasol','accessories',2,70000),
-	 ('billy','sunglasses','accessories',923,75),
-	 ('june','hamburger','food',20000,2),
-	 ('bob','wings','food',50000,9),
-	 ('will','flaming greatsword','accessories',5,1),
-	 ('sandy','sand','food',76502,4),
-	 ('rob','apple','food',376,985);
+INSERT INTO products (id,"name",category,price,in_stock,description) VALUES
+	 ('jill','parasol','accessories',2,70000,'keeps you shady'),
+	 ('billy','sunglasses','accessories',923,75,'keeps your eyes shady'),
+	 ('june','hamburger','food',20000,2,'soo much sodium'),
+	 ('bob','wings','food',50000,9,'not chicken wings'),
+	 ('will','flaming greatsword','accessories',5,1,'cleave your enemies!'),
+	 ('sandy','sand','food',76502,4,'for a very discerning and specialized palette'),
+	 ('rob','apple','food',376,985,'gala');
 
 --bobbbbbb's cart
 INSERT INTO cart_products (id,user_id,product_id,quantity) VALUES

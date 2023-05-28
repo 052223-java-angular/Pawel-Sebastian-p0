@@ -22,5 +22,6 @@ public class Product {
     private String category;
     private int price;
     private int inStock;
+    private String Description;
     
 }
