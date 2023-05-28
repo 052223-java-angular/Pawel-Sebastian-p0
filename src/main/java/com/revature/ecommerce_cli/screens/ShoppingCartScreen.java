@@ -24,20 +24,20 @@ public class ShoppingCartScreen implements IScreen{
     @Override
     public void start(Scanner scan) {
         String input = "";
-        logger.info("Navigated to Shopping Cart Screen");
+        logger.info("Navigated to " + session.getUsername() + "'s Shopping Cart");
         List<CartItem> cartItems = cartProductService.getCartItemsByUserId(session.getId());
         exit: {
             while(true) {
                 redrawCart(cartItems);
                 System.out.println("\n[1] Modify item quantity");
-                System.out.println("[2] Checkout");
+                System.out.println("[2] Remove Item");
+                System.out.println("[3] Checkout");
                 System.out.println("\n[x] Main Menu");
 
                 System.out.print("\nEnter: ");
                 input = scan.nextLine();
                 switch(input.toLowerCase()) {
                     case "1":
-                        logger.info("user modifying cart item quantity");
                         if(cartItems.size() == 0) {
                             logger.info("No Cart items when attempting to modify quantity");
                             System.out.println("Shopping cart empty!");
@@ -45,9 +45,21 @@ public class ShoppingCartScreen implements IScreen{
                             scan.nextLine();
                             break;
                         }
+                        logger.info("user modifying cart item quantity");
                         modifyQuantity(cartItems, scan);
                         break;
                     case "2":
+                        if(cartItems.size() == 0) {
+                            logger.info("No Cart items when attempting to modify quantity");
+                            System.out.println("Shopping cart empty!");
+                            System.out.print("\nPress Enter: ");
+                            scan.nextLine();
+                            break;
+                        }
+                        logger.info("user removing shopping cart item");
+                        removeItem(cartItems, scan);
+                        break;
+                    case "3":
                         logger.info("user begin checkout");
                         break exit;
                     case "x":
@@ -67,8 +79,10 @@ public class ShoppingCartScreen implements IScreen{
         clearScreen();
         logger.info("redrawing shopping cart");
         System.out.println(session.getUsername() + "'s Shopping Cart");
+        System.out.println();
         System.out.printf("%-40s %9s %8s %16s %8s %5s\n", "Product Name", "Unit Price", "Quantity",
             "Total Price", "In Stock", "ID");
+        System.out.println();
         int totalPrice = 0;
         int countItem = 1;
         for (CartItem item : cartItems) {
@@ -85,13 +99,13 @@ public class ShoppingCartScreen implements IScreen{
         System.out.println("Total: " + PriceUtil.centsToString(totalPrice));
     }
 
-    private void modifyQuantity(List<CartItem> cartItems, Scanner scan) {
+    private void removeItem(List<CartItem> cartItems, Scanner scan) {
         String input = "";
         int inInt;
-        clearScreen();
-        redrawCart(cartItems);
+        CartItem removed;
         while (true) {
-            System.out.print("\n Enter ID of product to modify (x to cancel): ");
+            redrawCart(cartItems);
+            System.out.print("\n Enter ID of product to remove (x to cancel): ");
             input = scan.nextLine().toLowerCase();
             if(input.equals("x")) return;
             try {
@@ -103,42 +117,83 @@ public class ShoppingCartScreen implements IScreen{
                 logger.info("invalid ID when modifying item quantity in cart");
                 continue;
             }
-            break;
+            removed = cartItems.get(inInt - 1);
+            System.out.print("Enter 'y' to confirm delete " + removed.getProductName() + ": ");
+            input = scan.nextLine().toLowerCase();
+            if(input.equals("y")) break;
         }
-        CartItem edited = cartItems.get(inInt - 1);
-        int quantityIn;
-        while (true) {
-            System.out.print("\n Enter new quantity for " + edited.getProductName() + ": ");
+        String cartProductId = removed.getCartProductId();
+        cartProductService.deleteById(cartProductId);
+        cartItems.remove(inInt - 1);
+        logger.info("deleted CartProduct id + " + cartProductId);
+        System.out.println("Deleted " + removed.getProductName() + " from Cart");
+        System.out.print("\n press Enter to continue ");
+        scan.nextLine();
+        return;
+    }
+
+    private void modifyQuantity(List<CartItem> cartItems, Scanner scan) {
+        String input = "";
+        int inInt;
+        boolean shouldRedraw = true;
+        outer: while (true) {
+            if(shouldRedraw) redrawCart(cartItems);
+            shouldRedraw = true;
+            System.out.print("\n Enter ID of product to modify (x to cancel): ");
             input = scan.nextLine().toLowerCase();
             if(input.equals("x")) return;
             try {
-                quantityIn = Integer.parseInt(input);
-                if(quantityIn < 0 || quantityIn > edited.getInStock())
-                    throw new IndexOutOfBoundsException("Quantity out of range");
+                inInt = Integer.parseInt(input);
+                if(inInt < 1 || inInt > cartItems.size()) throw new IndexOutOfBoundsException("ID out of range");
             } catch (Exception e) {
-                System.out.println("invalid quantity entered");
+                System.out.println("invalid ID entered");
                 System.out.println(e.getMessage());
-                logger.info("invalid quantity when modifying item quantity in cart");
-                continue;
+                logger.info("invalid ID when modifying item quantity in cart");
+                continue outer;
             }
+            CartItem edited = cartItems.get(inInt - 1);
+            int quantityIn;
+            inner: while (true) {
+                System.out.print("\n Enter new quantity for " + edited.getProductName() + ": ");
+                input = scan.nextLine().toLowerCase();
+                if(input.equals("x")) return;
+                try {
+                    quantityIn = Integer.parseInt(input);
+                    if(quantityIn < 0 || quantityIn > edited.getInStock())
+                        throw new IndexOutOfBoundsException("Quantity out of range");
+                } catch (Exception e) {
+                    System.out.println("invalid quantity entered");
+                    System.out.println(e.getMessage());
+                    logger.info("invalid quantity when modifying item quantity in cart");
+                    continue inner;
+                }
+                break inner;
+            }
+            String cartProductId = edited.getCartProductId();
+            if(quantityIn == 0) {
+                System.out.print("Enter 'y' to confirm delete " + edited.getProductName() + ": ");
+                input = scan.nextLine().toLowerCase();
+                if(!input.equals("y")) {
+                    shouldRedraw = false;
+                    redrawCart(cartItems);
+                    System.out.println("\n Delete Cancelled");
+                    logger.info("set Cart item quantity to 0 cancelled");
+                    continue outer;}
+                cartProductService.deleteById(cartProductId);
+                cartItems.remove(inInt - 1);
+                logger.info("deleted CartProduct id + " + cartProductId);
+                System.out.println("Deleted " + edited.getProductName() + " from Cart");
+                System.out.print("\n press Enter to continue ");
+                scan.nextLine();
+                return;
+            }
+            System.out.println("Setting new quantity to " + quantityIn);
+            logger.info("changing quantity to " + quantityIn + " for CartProduct id + " + cartProductId);
+            cartProductService.updateQuantityById(edited.getCartProductId(), quantityIn);
+            logger.info("updated quantity for for CartProduct id + " + cartProductId);
+            edited.setQuantity(quantityIn);
             break;
         }
-        String cartProductId = edited.getCartProductId();
-        if(quantityIn == 0) {
-
-            cartProductService.deleteById(cartProductId);
-
-            logger.info("deleted CartProduct id + " + cartProductId);
-            System.out.println("Deleted " + edited.getProductName() + " from Cart");
-            System.out.print("\n press Enter to continue ");
-            scan.nextLine();
-            return;
-        }
-        System.out.println("Setting new quantity to " + quantityIn);
-        logger.info("changing quantity to " + quantityIn + " for CartProduct id + " + cartProductId);
-        cartProductService.updateQuantityById(edited.getCartProductId(), quantityIn);
-        logger.info("updated quantity for for CartProduct id + " + cartProductId);
-        edited.setQuantity(quantityIn);
     }
 
     private void clearScreen() {
