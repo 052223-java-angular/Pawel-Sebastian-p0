@@ -1,5 +1,5 @@
 
-INSERT INTO products (id,"name",category,price,in_stock,description) VALUES
+INSERT INTO ecommerce_cli.products (id,"name",category,price,in_stock,description) VALUES
 	 ('blah','hairbrush','beauty',600,122,'make hair straight'),
 	 ('tine','comb','beauty',300,22,'makes haircomb'),
 	 ('brassy','trombone','instruments',50000,3,'makes fart noises'),

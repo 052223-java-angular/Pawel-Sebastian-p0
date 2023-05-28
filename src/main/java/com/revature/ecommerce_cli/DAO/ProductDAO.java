@@ -127,7 +127,7 @@ public class ProductDAO implements CrudDAO<Product> {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             Statement s = conn.createStatement();
-            try(ResultSet rs = s.executeQuery("select * from products")) {
+            try(ResultSet rs = s.executeQuery("select * from products order by name")) {
                 while(rs.next()) {
                     retArray.add(getFromResultSet(rs));
                 }
@@ -148,7 +148,7 @@ public class ProductDAO implements CrudDAO<Product> {
     public List<Product> findByName(String name) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from products where name ilike ?";
+            String sql = "select * from products where name ilike ? order by name";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, "%" + name + "%");
@@ -175,7 +175,7 @@ public class ProductDAO implements CrudDAO<Product> {
     public List<Product> findByPriceRange(int first, int second) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from products where price between ? and ?";
+            String sql = "select * from products where price between ? and ? order by price";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setDouble(1, first);
@@ -228,7 +228,7 @@ public class ProductDAO implements CrudDAO<Product> {
     public List<Product> findByCategory(String name) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from products where category ilike ?";
+            String sql = "select * from products where category ilike '?' order by category, name";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, "%" + name + "%");

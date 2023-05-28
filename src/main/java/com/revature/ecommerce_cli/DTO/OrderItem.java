@@ -8,8 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderItem {
-    private String ProductId;
+    private String productId;
     private String productName;
     private int quantity;
     private int unitPrice;
+    private String productCategory;
 }
