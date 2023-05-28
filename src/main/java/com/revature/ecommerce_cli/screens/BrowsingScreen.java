@@ -17,7 +17,7 @@ public class BrowsingScreen implements IScreen{
     private final ProductService productService;
     private Session session;
     RouterService router;
-    //private List<Product> productList;
+    
     
     public BrowsingScreen(ProductService productService, RouterService routerService, Session session) {
         this.productService = productService;
@@ -36,40 +36,48 @@ public class BrowsingScreen implements IScreen{
             while (true) {
                 List<Product> productList = productService.getAll();
                 clearScreen();
-                System.out.println("Welcome to the browsing screen " + session.getUsername() + " !");
-                System.out.println("Please take a glance at the items below:");
+                System.out.println("Welcome to the product screen, " + session.getUsername() + " !");
+                System.out.println("Please select an item below: \n");
 
                 // loop over productList and print each product
                 for (int i = 0; i < productList.size(); i++) {
                 Product product = productList.get(i);
                 // Assuming the Product class has a toString() method to print details of the product
-                System.out.println((i + 1) + ": " + product.toString()); 
+                System.out.printf("[%2d] View : %-20s -Current Stock: %d\n", (i + 1), product.getName(), product.getInStock());
+
             }
-                System.out.println("\n[1] Shopping Cart");
+                
                 System.out.println("\n[x] Exit");
                 System.out.print("\nEnter: ");
                 input = scan.nextLine();
                 
-                switch (input.toLowerCase()) {
-                    case "1":
-                        logger.info("Navigating to Shopping Cart");
-                        router.navigate("/shopping_cart", scan);
-                        break;
-                    case "2":
-                    logger.info("Browse Products");
-                    router.navigate("/browseproducts", scan);
-                    break;
-                    case "3":
-                    logger.info("View orders");
-                    router.navigate("/vieworders",scan);
+                try{ 
+                    int productIndex = Integer.parseInt(input) -1; 
+                    if(productIndex >= 0 && productIndex < productList.size()){
+                        Product product = productList.get(productIndex);
+                        System.out.println("You selected: " + product.getName());
+                        router.navigate("/product", scan, productList.get(productIndex));
+                    }
+                else{
+                    logger.warn("Invalid option!");
+                    clearScreen();
+                }
+            }catch(NumberFormatException e){
+                switch (input) {
                     case "x":
-                        logger.info("user sign out");
+                        logger.info("User signed out");
                         break exit;
                     default:
                         logger.warn("Invalid option!");
                         clearScreen();
                 }
             }
+        }
+
+
+
+
+                
         }
     }
 
@@ -78,8 +86,6 @@ public class BrowsingScreen implements IScreen{
     private void clearScreen() {
     System.out.print("\033[H\033[2J");
     System.out.flush();
-        
-
-}
+    }
  
 }

@@ -4,9 +4,11 @@ import com.revature.ecommerce_cli.models.User;
 import com.revature.ecommerce_cli.screens.BrowsingScreen;
 import com.revature.ecommerce_cli.screens.HomeScreen;
 import com.revature.ecommerce_cli.screens.MenuScreen;
+import com.revature.ecommerce_cli.screens.ProductScreen;
 import com.revature.ecommerce_cli.screens.LoginScreen;
 import com.revature.ecommerce_cli.screens.RegisterScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
+import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -51,9 +53,20 @@ public class RouterService {
         break;
         }
     }
+    public void navigate(String path, Scanner scanner, Product product) {
+       
+    
+    switch(path){
+        case "/product": 
+            new ProductScreen(product).start(scanner);
+            break;
+        }
+    
+    }
+    
 
 
-/* ----------------- Helper Method ------------------------- */ 
+/* ----------------- Helper Methods ------------------------- */ 
 
 private UserService getUserService(){
 
