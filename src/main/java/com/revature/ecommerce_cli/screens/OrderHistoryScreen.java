@@ -97,6 +97,7 @@ public class OrderHistoryScreen implements IScreen{
                 scan.nextLine();
                 continue;
             }
+            logger.info("Navigating to product screen from Order History");
             router.navigate("/product", scan,
                 productService.getById(orderItems.get(productSelect - 1).getProductId()));
         }
