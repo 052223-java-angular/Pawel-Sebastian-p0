@@ -197,7 +197,7 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
             String sql = "SELECT cart_products.id as cart_product_id, products.name as product_name, quantity, " +
                 "products.price as unit_price, in_stock FROM cart_products join products on product_id = " +
-                "products.id where cart_products.user_id = ?";
+                "products.id where cart_products.user_id = ? order by products.name";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, userId);
