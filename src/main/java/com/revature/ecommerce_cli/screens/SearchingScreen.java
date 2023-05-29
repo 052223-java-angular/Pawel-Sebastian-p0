@@ -145,14 +145,20 @@ public void categorySearch(Scanner scan, String input){
         for(int i = 0; i < categoryList.size(); i++){
             System.out.println("[" + (i+1) + "] " + categoryList.get(i));
         }
-        System.out.println("\n-Enter Product Category:\n  ");
+        System.out.println("\n-Enter Product Category:\n  (x to go back) ");
         input = scan.nextLine().trim();
 
-        if(input.isEmpty()){
-            System.out.println("Product category can not be empty, please enter a valid product category.");
-            System.out.println("Enter x to exit:");
+        if(input.equalsIgnoreCase("x")){
+            break;
+        }
+        else if(input.isEmpty() || !categoryList.contains(input)){
+            clearScreen();
+            System.out.println("Invalid product category, please enter a valid product category.");
+            System.out.println("Press Enter to try again.");
+            scan.nextLine();
             continue;
         }
+        
         List<Product> products = searchProductByCategory(input);
         if(products.isEmpty()){
             System.out.println("No products found with that category, search again: ");
@@ -177,10 +183,10 @@ public void categorySearch(Scanner scan, String input){
                     
                     break;
             }
-            getProductPage(scan, input, products);
+            getProductPage(scan, input, products);}
         }
         
-    }
+    
 
 public void getProductPage(Scanner scan, String input, List<Product> products){
     
