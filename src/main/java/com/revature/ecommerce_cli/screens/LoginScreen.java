@@ -9,12 +9,16 @@ import com.revature.ecommerce_cli.models.User;
 import lombok.AllArgsConstructor;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @AllArgsConstructor
 public class LoginScreen implements IScreen{
     private final UserService userService;
     private final RouterService routerService;
     private Session session;
 
+    private static final Logger logger = LogManager.getLogger(LoginScreen.class);
     
 
     @Override
@@ -24,18 +28,21 @@ public class LoginScreen implements IScreen{
 
         exit: {
            while(true){
+                logger.info("Start Login Screen");
                 clearScreen();
                 System.out.println("\nWelcome to the login screen.");
                 
                 //get username
                 username = getUsername(scan);
                 if (username.equals("x")) {
+                    logger.info("Cancel Username");
                     break exit;
                 }
 
                 //get password
                 password = getPassword(scan);
                 if(password.equals("x")) {
+                    logger.info("Cancel Password");
                     break exit;
                 }
 
@@ -45,11 +52,13 @@ public class LoginScreen implements IScreen{
                     System.out.println("\nPress enter to continue...");
                     //System.out.println(" " + username + " " );
                     
+                    logger.info("Incorrect login attempt for username " + username);
                     scan.nextLine();
                    
                     continue;
                 } 
                     session.setSession(user.get());
+                    logger.debug("Navigate to Menu, Login successful");
                     routerService.navigate("/menu", scan);
                     return;
             }

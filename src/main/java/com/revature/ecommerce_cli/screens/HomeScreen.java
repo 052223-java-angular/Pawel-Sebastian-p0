@@ -3,13 +3,15 @@ package com.revature.ecommerce_cli.screens;
 import java.util.Scanner;
 import com.revature.ecommerce_cli.services.RouterService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class HomeScreen implements IScreen {
-
-
 private final RouterService router;
 
-public HomeScreen(RouterService router){
+private static final Logger logger = LogManager.getLogger(HomeScreen.class);
+
+    public HomeScreen(RouterService router){
 
     this.router = router;
 }
@@ -19,7 +21,7 @@ public HomeScreen(RouterService router){
     public void start(Scanner scan) {
 
         String input = "";
-
+        logger.debug("Home screen start");
         exit: {
 
             while(true){
@@ -36,9 +38,11 @@ public HomeScreen(RouterService router){
                 switch(input.toLowerCase()){
 
                     case "1":
+                        logger.debug("navigating to login screen");
                         router.navigate("/login", scan);
                     break;
                     case "2":
+                        logger.debug("navigating to register screen");
                         router.navigate("/register", scan);
                     break;
                     case "x":
@@ -48,6 +52,7 @@ public HomeScreen(RouterService router){
                     clearScreen();
                         System.out.println("\nInvalid Option!");
                         System.out.println("\nPress enter to continue...");
+                        logger.trace("Home screen invalid option");
                         scan.nextLine();
                         break;
         }

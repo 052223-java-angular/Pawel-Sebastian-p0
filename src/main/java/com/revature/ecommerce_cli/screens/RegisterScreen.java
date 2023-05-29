@@ -9,12 +9,15 @@ import com.revature.ecommerce_cli.models.Session;
 
 import lombok.AllArgsConstructor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @AllArgsConstructor
 public class RegisterScreen implements IScreen{
     private final UserService userService;
     private final RouterService routerService;
     private Session session;
+    private static final Logger logger = LogManager.getLogger(RegisterScreen.class);
 
     @Override
     public void start(Scanner scan) {
@@ -22,6 +25,7 @@ public class RegisterScreen implements IScreen{
         String username = "";
         String password = "";
 
+        logger.debug("begin RegisterScreen");
         exit: {
 
             while(true){
@@ -46,6 +50,7 @@ public class RegisterScreen implements IScreen{
 
                 }
 
+                logger.debug("asking for credential confirmation");
                 //confirm users info
                 clearScreen();
                 System.out.println("Please confirm your credentials.");
@@ -58,15 +63,19 @@ public class RegisterScreen implements IScreen{
                     User newUser = userService.register(username, password);
                     //session = new Session();
                     session.setSession(newUser);
+                    logger.info("created new user " + username);
+                    logger.info("routing to menu");
                     routerService.navigate("/menu", scan);
                     break exit;
                     case "n":
+                        logger.debug("incorrect credentials");
                         clearScreen();
                         System.out.println("\nRestarting process:");
                         System.out.println("\nPress enter to continue...");
                         scan.nextLine();
                     break;
                     default:
+                        logger.debug("invalid y/n choice on confirmation");
                         clearScreen();
                         System.out.println("\nInvalid Option!");
                         System.out.println("\nPress enter to continue...");
@@ -91,6 +100,7 @@ public String getUsername(Scanner scan){
 
     String username = "";
 
+    logger.debug("get username");
     while(true){
     System.out.println("\nEnter Username (x to cancel): ");
     username = scan.nextLine();
@@ -104,6 +114,7 @@ public String getUsername(Scanner scan){
     }
 
     if(!userService.isValidUsername(username)){
+        logger.info("invalid username " + username);
 
         clearScreen();
         System.out.println("Username must be 8-20 characters long");
@@ -113,6 +124,7 @@ public String getUsername(Scanner scan){
     }
 
     if(!userService.isUniqueUsername(username)){
+        logger.info("non-unique username");
         clearScreen();
         System.out.println("Sorry that username is taken! Try again: ");
         System.out.println("\nPress enter to continue...");
@@ -140,6 +152,7 @@ public String getPassword(Scanner scan){
         }
         if(!userService.isValidPassword(password)){
             clearScreen();
+            logger.info("invalid password");
             System.out.println("Password needs to be min 8 characters, and at least 1 letter and 1 number.");
             System.out.println("\nPress enter to continue...");
             scan.nextLine();
@@ -155,6 +168,7 @@ public String getPassword(Scanner scan){
 
         if(!userService.isSamePassword(password, confirmPassword)){
             clearScreen();
+            logger.debug("inconsistent passwords");
             System.out.println("Passwords do not match!");
             System.out.println("\nPress enter to continue...");
             scan.nextLine();
