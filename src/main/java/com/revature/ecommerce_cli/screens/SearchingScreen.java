@@ -224,10 +224,8 @@ public void priceSearch(Scanner scan, String input){
     while(true){
         clearScreen();
         System.out.println("-Searching by Product Price ");
-        System.out.println("\n-Enter Product Price Lower Bound ($x.xx):\n  ");
+        System.out.print("\n-Enter Product Price Lower Bound ($x.xx):\n  $");
         input = scan.nextLine().trim();
-        double lowerBound = Double.parseDouble(input);
-
         int lowerBoundCents;
         try{
             lowerBoundCents = PriceUtil.toCents(input);
@@ -239,9 +237,8 @@ public void priceSearch(Scanner scan, String input){
 
         int upperBoundCents;
 
-        System.out.println("\n-Enter Product Price Upper Bound ($x.xx):\n  ");
+        System.out.print("\n-Enter Product Price Upper Bound ($x.xx):\n  $");
         input = scan.nextLine().trim();
-        double upperBound = Double.parseDouble(input);
         try{
             upperBoundCents = PriceUtil.toCents(input);
         }
@@ -264,15 +261,15 @@ public void priceSearch(Scanner scan, String input){
             System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item #" , "Name:", "Category:", "Price", "In Stock", "Description");
             for(int i = 0; i < products.size(); i++){
                 Product product = products.get(i);
-                System.out.printf("%-5d  %-20s %-15s %-10d %-10d 1%-20s%n", i +1, product.getName(), 
-                product.getCategory(), product.getPrice(), product.getInStock(), 
+                System.out.printf("%-5d  %-20s %-15s %-10s %-10d %-20s%n", i +1, product.getName(), 
+                product.getCategory(), PriceUtil.centsToString(product.getPrice()), product.getInStock(), 
                 product.getDescription());
-                input = scan.nextLine();
-                if(input.equals("x")){
-                    break;
-                }
                 
                 
+            }
+            input = scan.nextLine();
+            if(input.equals("x")){
+                break;
             }
             getProductPage(scan, input, products);
         }

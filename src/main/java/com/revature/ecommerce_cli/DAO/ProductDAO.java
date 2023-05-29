@@ -178,8 +178,8 @@ public class ProductDAO implements CrudDAO<Product> {
             String sql = "select * from products where price between ? and ? order by price";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setDouble(1, first);
-                ps.setDouble(2, second);
+                ps.setInt(1, first);
+                ps.setInt(2, second);
                 try(ResultSet rs = ps.executeQuery()) {
                     while(rs.next()) {
                         retArray.add(getFromResultSet(rs));
@@ -231,7 +231,7 @@ public class ProductDAO implements CrudDAO<Product> {
             String sql = "select * from products where category ilike '?' order by category, name";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setString(1, "%" + name + "%");
+                ps.setString(1, name);
 
                 try(ResultSet rs = ps.executeQuery()) {
                     while(rs.next()) {
