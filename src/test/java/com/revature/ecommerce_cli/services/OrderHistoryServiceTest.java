@@ -2,6 +2,9 @@ package com.revature.ecommerce_cli.services;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +16,7 @@ import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.*;
 
+import com.revature.ecommerce_cli.models.Order;
 import com.revature.ecommerce_cli.DAO.OrderProductDAO;
 import com.revature.ecommerce_cli.DAO.OrderDAO;
 import com.revature.ecommerce_cli.DTO.OrderItem;
@@ -45,6 +49,25 @@ public class OrderHistoryServiceTest {
         orderHistoryService.deleteById("e8046b97-be23-4aa7-9010-b0f9eff17b69");
 
         verify(orderProductDAO, times(1)).delete("e8046b97-be23-4aa7-9010-b0f9eff17b69");
+    }
+
+    @Test
+    public void getOrdersByUserIdTest() {
+        List<Order> orders = new ArrayList<Order>();
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        orders.add(new Order("a7d6102c-abe0-4a66-88a5-06ce3032dd76", "de00c7b2-f06d-45d3-ae1e-d443d4cad2db",
+            1199, new Date()));
+        try {
+            orders.add(new Order("47040c35-3c6f-42be-92fd-031461e9852a", "de00c7b2-f06d-45d3-ae1e-d443d4cad2db",
+                1199, df.parse("07/10/1996")));
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+        when(orderDAO.findByUserId("de00c7b2-f06d-45d3-ae1e-d443d4cad2db")).thenReturn(orders);
+        List<Order> actual = orderHistoryService.getOrdersByUserId("de00c7b2-f06d-45d3-ae1e-d443d4cad2db");
+        assertEquals(orders.get(0).getAmount(), actual.get(0).getAmount());
+        assertEquals(orders.get(1).getAmount(), actual.get(1).getAmount());
+        verify(orderDAO, times(1)).findByUserId("de00c7b2-f06d-45d3-ae1e-d443d4cad2db");
     }
 
     @Test
