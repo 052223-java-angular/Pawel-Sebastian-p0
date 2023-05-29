@@ -13,7 +13,6 @@ import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
 import com.revature.ecommerce_cli.services.ProductService;
 import com.revature.ecommerce_cli.services.RouterService;
-import com.revature.ecommerce_cli.util.StringUtil;
 import com.revature.ecommerce_cli.util.PriceUtil;
 
 
@@ -166,8 +165,8 @@ public void categorySearch(Scanner scan, String input){
             
             for(int i = 0; i < products.size(); i++){   
                 Product product = products.get(i);
-                System.out.printf("%-5d %-20s %-15s %-10d %-10d %-20s%n", i+1, product.getName(), 
-                product.getCategory(), product.getPrice(), product.getInStock(), 
+                System.out.printf("%-5d %-20s %-15s %-10s %-10d %-20s%n", i+1, product.getName(), 
+                product.getCategory(), PriceUtil.centsToString(product.getPrice()), product.getInStock(), 
                 product.getDescription());
                 
             }
