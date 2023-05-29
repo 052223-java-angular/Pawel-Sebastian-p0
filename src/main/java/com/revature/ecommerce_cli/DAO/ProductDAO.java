@@ -199,10 +199,36 @@ public class ProductDAO implements CrudDAO<Product> {
         return retArray;
     }
 
+    public List<String> getAllCategories() {
+        List<String> categoriesList = new ArrayList<String>();
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "select distinct category from products";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                try(ResultSet rs = ps.executeQuery()) {
+                    while(rs.next()) {
+                        categoriesList.add(rs.getString("category"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return categoriesList;
+    }
+
+
     public List<Product> findByCategory(String name) {
         List<Product> retArray = new ArrayList<Product>();
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
-            String sql = "select * from products where category ilike '?' order by category, name";
+            String sql = "select * from products where category ilike ? order by category, name";
 
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, name);
@@ -225,6 +251,7 @@ public class ProductDAO implements CrudDAO<Product> {
 
         return retArray;
     }
+
 
     private static final Product getFromResultSet(ResultSet rs) throws SQLException {
         return new Product(rs.getString("id"), rs.getString("name"),

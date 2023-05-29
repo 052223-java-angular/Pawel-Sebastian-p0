@@ -19,12 +19,27 @@ public class ProductService {
     }
 
 
-    public List<Product> searchProductByName(String input) {
-        return productDAO.findByName(input);
+    public List<Product> searchProductByName(String name) {
+        return productDAO.findByName(name);
     }
    
     public Product getById(String id) {
         Optional<Product> productOpt = productDAO.findById(id);
         return productOpt.orElseThrow(ProductNotFoundException::new);
+    }
+
+    // public List<String> getAllCategories() {
+    //     return productDAO.findAllCategories();
+    // }
+    public List<Product> getByCategory(String category) {
+        return productDAO.findByCategory(category);
+    }
+
+    public List<String> allCategories() {
+        return productDAO.getAllCategories();
+    }
+
+    public List<Product> getByPrice(int lowerBound, int upperBound) {
+        return productDAO.findByPriceRange(lowerBound, upperBound);
     }
 }
