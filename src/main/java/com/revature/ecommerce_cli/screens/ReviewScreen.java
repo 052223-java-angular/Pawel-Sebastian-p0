@@ -7,14 +7,16 @@ import com.revature.ecommerce_cli.models.Review;
 import lombok.AllArgsConstructor;
 import java.util.List;
 import com.revature.ecommerce_cli.services.ReviewService;
+import com.revature.ecommerce_cli.models.Product;
 
 
 @AllArgsConstructor
 
 public class ReviewScreen implements IScreen{
     
-    private Review review;
     private Product product;
+    private ReviewService reviewService;
+    
 
    
     @Override
@@ -23,9 +25,8 @@ public class ReviewScreen implements IScreen{
     String input = "";
     while(true){
         clearScreen();
-        System.out.println("Welcome to the Reviews Page for ");
-        
-        input = scan.nextLine();
+        System.out.println("Welcome to the Review Page for " + product.getName() + "!");
+        displayReviews();
 
 
         if(input.equals("x")){
@@ -40,15 +41,15 @@ public class ReviewScreen implements IScreen{
         System.out.print("\033[H\033[2J");
         System.out.flush();
         }
-}
+
 
 
 //---------
 
-public void showReviews() {
-    Object reviewService;
-    List<Review> reviews = reviewService.getAllReviews();
+public void displayReviews() {
+    
+    List<Review> reviews = reviewService.getReviewsByProductId(product.getId());
     for (Review review : reviews) {
         System.out.println(review);
     }
-}
+}}

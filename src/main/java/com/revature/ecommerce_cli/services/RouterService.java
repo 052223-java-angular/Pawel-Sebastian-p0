@@ -7,6 +7,7 @@ import com.revature.ecommerce_cli.screens.ProductScreen;
 import com.revature.ecommerce_cli.screens.LoginScreen;
 import com.revature.ecommerce_cli.screens.OrderHistoryScreen;
 import com.revature.ecommerce_cli.screens.RegisterScreen;
+import com.revature.ecommerce_cli.screens.ReviewScreen;
 import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 
@@ -20,6 +21,7 @@ import com.revature.ecommerce_cli.DAO.CartProductDAO;
 import com.revature.ecommerce_cli.DAO.OrderDAO;
 import com.revature.ecommerce_cli.DAO.OrderProductDAO;
 import com.revature.ecommerce_cli.DAO.ProductDAO;
+import com.revature.ecommerce_cli.DAO.ReviewDAO;
 
 import java.util.Scanner;
 //returns screen 
@@ -60,17 +62,19 @@ public class RouterService {
             break;
             case "/searching":
                 new SearchingScreen(session, this, getProductService()).start(scan);
-            case "/review":
-                new ReviewService(session, this).start(scan);
+            
         break;
         }
     }
-    public void navigate(String path, Scanner scanner, Product product) {
+    public void navigate(String path, Scanner scan, Product product) {
        
     
     switch(path){
         case "/product": 
-            new ProductScreen(product).start(scanner);
+            new ProductScreen(product, this).start(scan);
+            break;
+        case "/review":
+            new ReviewScreen(product, getReviewService()).start(scan);
             break;
         }
     
@@ -100,6 +104,7 @@ private CartService getCartService(){
 private ProductService getProductService(){
     return new ProductService(new ProductDAO());
 }
+private ReviewService getReviewService(){
+    return new ReviewService(new ReviewDAO());
 
-
-}
+}}

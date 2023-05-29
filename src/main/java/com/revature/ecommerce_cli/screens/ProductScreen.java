@@ -5,7 +5,7 @@ import java.util.Scanner;
 import com.revature.ecommerce_cli.models.Product;
 
 import lombok.AllArgsConstructor;
-import com.revature.ecommerce_cli.util.RouterService;
+import com.revature.ecommerce_cli.services.RouterService;
 
 @AllArgsConstructor
 
@@ -28,6 +28,7 @@ public class ProductScreen implements IScreen{
         + product.getDescription() + "\n");
         
         System.out.println("[1] View Reviews for this Product");
+        System.out.println("[2] Add Review for this Product");
         System.out.println("[x] Exit");
         System.out.print("\nEnter: ");
         input = scan.nextLine();
@@ -36,7 +37,11 @@ public class ProductScreen implements IScreen{
         switch(input){
             case "1":
                 clearScreen();
-                router.navigate("/review");
+                router.navigate("/review", scan, product);
+                break;
+            case "2":
+                clearScreen();
+                router.navigate("/addreview", scan, product);
                 break;
             case "x":
                 break;
