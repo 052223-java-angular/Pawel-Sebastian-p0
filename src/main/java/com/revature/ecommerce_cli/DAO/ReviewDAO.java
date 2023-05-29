@@ -151,7 +151,7 @@ public class ReviewDAO implements CrudDAO<Review> {
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, userId);
 
-                try(ResultSet rs = ps.executeQuery(sql)) {
+                try(ResultSet rs = ps.executeQuery()) {
                     while(rs.next()) {
                         Review retReview = new Review(rs.getString("id"), rs.getInt("rating"),
                             rs.getString("comment"), rs.getString("userId"), rs.getString("productId"));
@@ -180,10 +180,10 @@ public class ReviewDAO implements CrudDAO<Review> {
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, productId);
 
-                try(ResultSet rs = ps.executeQuery(sql)) {
+                try(ResultSet rs = ps.executeQuery()) {
                     while(rs.next()) {
                         Review retReview = new Review(rs.getString("id"), rs.getInt("rating"),
-                            rs.getString("comment"), rs.getString("userId"), rs.getString("productId"));
+                            rs.getString("comment"), rs.getString("user_id"), rs.getString("product_id"));
                         retArray.add(retReview);
                     }
                 }

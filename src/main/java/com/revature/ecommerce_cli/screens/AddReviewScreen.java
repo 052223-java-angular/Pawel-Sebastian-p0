@@ -58,11 +58,9 @@ public class AddReviewScreen implements IScreen {
 public void addReview(Scanner scan) {
 
     while(true){
-        clearScreen(); 
-        
         System.out.println("Please enter your review below: (x to go back) ");
         String input = scan.nextLine();
-        if(review.equals("x")){
+        if(input.equals("x")){
             break;
         }else{
             review.setComment(input);
@@ -87,34 +85,31 @@ public void addUserId(){
 
 public void addRating(Scanner scan) {
 
-
+    clearScreen();
     while(true){
-        clearScreen();
         System.out.println("Please enter your rating (a number between 1 and 5): (x to go back) ");
         String rating = "";
         rating = scan.nextLine();
         if(rating.equals("x")){
             break;
         }else{
-                try{
-                    int intRating = Integer.parseInt(rating);
-                    if (intRating < 1 || intRating > 5) {
-                        System.out.println("Invalid rating, please enter a number between 1 and 5");
-                        break;
-                    }else{
+            try{
+                int intRating = Integer.parseInt(rating);
+                if (intRating < 1 || intRating > 5) {
+                    throw new NumberFormatException();
+                }else{
                 
-                        review.setRating(intRating);
-                        break;
+                    review.setRating(intRating);
+                    break;
                 }
+            }
+            catch(NumberFormatException e){
+                System.out.println("Invalid rating, please enter a number between 1 and 5");
+                continue;
+            }
+        }
     }
-        catch(NumberFormatException e){
-            System.out.println("Invalid rating, please enter a number between 1 and 5");
-            break;
-        }
-        }}
-        
-        
-        }
+}
    
     public void saveReview(){
         reviewService.saveReview(review);

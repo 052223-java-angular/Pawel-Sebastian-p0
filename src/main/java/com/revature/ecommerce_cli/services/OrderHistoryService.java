@@ -28,4 +28,20 @@ public class OrderHistoryService {
     public List<OrderProduct> getOrderProductsByOrderId(String orderId) {
         return orderProductDAO.findByOrderId(orderId);
     }
+
+    public boolean hasUserOrderedProduct(String productId, String userId){
+        
+        List<Order> orders = this.getOrdersByUserId(userId);
+        for(Order order : orders){
+            List<OrderProduct> orderProducts = this.getOrderProductsByOrderId(order.getId());
+            for(OrderProduct orderProduct : orderProducts) {
+                if(orderProduct.getProductId().equals(productId)){
+                    return true;
+            }
+        
+        }
+            
+        }
+        return false;
+    }
 }

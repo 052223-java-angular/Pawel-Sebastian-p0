@@ -48,27 +48,32 @@ public class ProductScreen implements IScreen{
         input = scan.nextLine();
 
 
+        clearScreen();
         switch(input){
             case "1":
-                clearScreen();
                 router.navigate("/review", scan, product);
                 break;
             case "2":
-                clearScreen();
-                //if(hasUserOrderedProduct(product.getId())){
+                /*
+                if(orderHistoryService.hasUserOrderedProduct(product.getId(), session.getId())){
+                */
                     router.navigate("/addreview", scan, product);
-                    //input = "x";
-                //}
-                // else{
-                //     System.out.println("You must purchase this product before you can review it.\n Press enter to continue");
-                //     scan.nextLine();
-                // }
+                /*
+                    input = "x";
+                }
+                 else{
+                     System.out.println("You must purchase this product before you can review it.\n Press enter to continue");
+                     scan.nextLine();
+                 }
+                 */
                 break;
             case "x":
                 break;
 
             default:
                 System.out.println("Invalid input");
+                System.out.print("Press Enter: ");
+                scan.nextLine();
                 break;
         }
         if(input.equals("x")){
@@ -79,21 +84,6 @@ public class ProductScreen implements IScreen{
     }
     
     
-    }
-    public boolean hasUserOrderedProduct(String productId){
-        
-        List<Order> orders = orderHistoryService.getOrdersByUserId(session.getId());
-        for(Order order : orders){
-            List<OrderProduct> orderProducts = orderHistoryService.getOrderProductsByOrderId(order.getId());
-            for(OrderProduct orderProduct : orderProducts) {
-                if(orderProduct.getProductId().equals(productId)){
-                    return true;
-            }
-        
-        }
-            
-        }
-        return false;
     }
 
       

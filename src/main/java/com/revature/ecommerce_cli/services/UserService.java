@@ -4,6 +4,7 @@ import java.util.Optional;
 import com.revature.ecommerce_cli.models.User;
 import org.mindrot.jbcrypt.BCrypt;
 import com.revature.ecommerce_cli.DAO.UserDAO;
+import com.revature.ecommerce_cli.util.custom_exceptions.UserNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -56,7 +57,10 @@ public class UserService {
         }
 
 
-    
+    public User getById(String id) {
+        Optional<User> user = userDao.findById(id);
+        return user.orElseThrow(UserNotFoundException::new);
+    } 
 
     public boolean isValidPassword(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
