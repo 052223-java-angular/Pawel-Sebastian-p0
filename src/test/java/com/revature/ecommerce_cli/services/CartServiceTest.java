@@ -18,6 +18,8 @@ import com.revature.ecommerce_cli.DTO.CartItem;
 
 public class CartServiceTest {
     
+    private final List<CartItem> cartItemList = new ArrayList<CartItem>();
+
     @Mock 
     private CartProductDAO cartProductDAO;
 
@@ -28,6 +30,9 @@ public class CartServiceTest {
         MockitoAnnotations.openMocks(this);
 
         cartService = new CartService(cartProductDAO);
+
+        cartItemList.add(new CartItem("48c5c4dc-5d81-416d-89ae-4456ba88723f", "Clown Shoes", 3, 3200, 1));
+        cartItemList.add(new CartItem("3a42586c-1f54-4638-94e2-95927bf61956", "brown pants", 2, 4099, 59));
     }
     
     @Test
@@ -36,7 +41,7 @@ public class CartServiceTest {
 
         cartService.deleteById("e8046b97-be23-4aa7-9010-b0f9eff17b69");
 
-        verify(cartProductDAO, times(1)).delete(any(String.class));
+        verify(cartProductDAO, times(1)).delete("e8046b97-be23-4aa7-9010-b0f9eff17b69");
     }
 
     @Test
@@ -44,15 +49,11 @@ public class CartServiceTest {
         doNothing().when(cartProductDAO).updateQuantityById(any(String.class), any(int.class));
 
         cartService.updateQuantityById("a2b48ff2-a830-4209-ae22-743dce500097", 6);
-        verify(cartProductDAO, times(1)).updateQuantityById(any(String.class), any(int.class));
+        verify(cartProductDAO, times(1)).updateQuantityById("a2b48ff2-a830-4209-ae22-743dce500097", 6);
     }
 
     @Test
     public void getCartItemsByUserIdTest() {
-        List<CartItem> cartItemList = new ArrayList<CartItem>();
-        cartItemList.add(new CartItem("78c79d26-fdff-11ed-be56-0242ac120002", "Clown Shoes", 3, 2300, 1));
-        cartItemList.add(new CartItem("06be3b26-fe00-11ed-be56-0242ac120002", "brown pants", 1, 6400, 99));
-
         when(cartProductDAO.findCartItemsByUserId("904cf680-fdff-11ed-be56-0242ac120002")).
             thenReturn(cartItemList);
         List<CartItem> actual = cartService.getCartItemsByUserId("904cf680-fdff-11ed-be56-0242ac120002");
