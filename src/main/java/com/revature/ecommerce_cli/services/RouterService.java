@@ -60,7 +60,8 @@ public class RouterService {
             break;
             case "/searching":
                 new SearchingScreen(session, this, getProductService()).start(scan);
-            
+            case "/review":
+                new ReviewService(session, this).start(scan);
         break;
         }
     }
