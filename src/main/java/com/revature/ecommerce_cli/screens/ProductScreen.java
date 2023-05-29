@@ -7,6 +7,9 @@ import com.revature.ecommerce_cli.models.Product;
 import lombok.AllArgsConstructor;
 import com.revature.ecommerce_cli.services.RouterService;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 @AllArgsConstructor
 
 public class ProductScreen implements IScreen{
@@ -14,12 +17,15 @@ public class ProductScreen implements IScreen{
     private Product product;
     private final RouterService router;
 
+    private static final Logger logger = LogManager.getLogger(ProductScreen.class);
    
     @Override
     public void start(Scanner scan) {
     
     String input = "";
+    log
     while(true){
+        logger.debug("Redrawing");
         clearScreen();
         System.out.println("Product: " + product.getName() + "\n Price: " 
         + product.getPrice() + "\nCategory: " 

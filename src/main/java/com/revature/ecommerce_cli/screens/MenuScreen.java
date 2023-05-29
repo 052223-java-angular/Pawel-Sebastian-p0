@@ -2,12 +2,9 @@ package com.revature.ecommerce_cli.screens;
 
 import java.util.Scanner;
 
-import org.apache.logging.log4j.LogManager;
 
 import com.revature.ecommerce_cli.services.RouterService;
-import com.revature.ecommerce_cli.models.User;
 import lombok.AllArgsConstructor;
-import java.util.Optional;
 import com.revature.ecommerce_cli.models.Session;
 
 import org.apache.logging.log4j.LogManager;

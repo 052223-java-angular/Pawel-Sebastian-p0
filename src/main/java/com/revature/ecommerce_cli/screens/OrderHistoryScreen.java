@@ -29,9 +29,9 @@ public class OrderHistoryScreen implements IScreen{
     public void start(Scanner scan) {
         String input = "";
         List<Order> orders = orderHistoryService.getOrdersByUserId(session.getId());
+        logger.info("Navigated to Order History Screen");
+        logger.info("got orders at Order History Screen");
         while (true) {
-            logger.info("Navigated to Order History Screen");
-            logger.info("got orders at Order History Screen");
             DateFormat df = DateFormat.getDateTimeInstance();
             clearScreen();
             logger.info("redrawing orders");
@@ -46,6 +46,7 @@ public class OrderHistoryScreen implements IScreen{
             int orderSelect;
             inner: while (true) {
                 System.out.print("\n Enter Order ID (x to return to Menu): ");
+                logger.debug("getting order ID");
                 input = scan.nextLine().toLowerCase();
                 if(input.equals("x")) return;
                 try {
@@ -67,8 +68,8 @@ public class OrderHistoryScreen implements IScreen{
     private boolean getOrderItems(Order thisOrder, Scanner scan) {
         String input = "";
         List<OrderItem> orderItems = orderHistoryService.getOrderItemsByOrderId(thisOrder.getId());
+        logger.info("Navigated to Order Details Screen");
         while (true) {
-            logger.info("Navigated to Order Details Screen");
             clearScreen();
             logger.info("redrawing order items");
             System.out.printf("%-35s %15s %9s %8s %16s %5s\n", "Product Name", "Category", "Unit Price", 
