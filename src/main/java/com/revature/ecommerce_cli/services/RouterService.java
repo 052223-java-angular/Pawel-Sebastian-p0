@@ -1,5 +1,6 @@
 package com.revature.ecommerce_cli.services;
 
+import com.revature.ecommerce_cli.screens.AddReviewScreen;
 import com.revature.ecommerce_cli.screens.BrowsingScreen;
 import com.revature.ecommerce_cli.screens.HomeScreen;
 import com.revature.ecommerce_cli.screens.MenuScreen;
@@ -7,10 +8,12 @@ import com.revature.ecommerce_cli.screens.ProductScreen;
 import com.revature.ecommerce_cli.screens.LoginScreen;
 import com.revature.ecommerce_cli.screens.OrderHistoryScreen;
 import com.revature.ecommerce_cli.screens.RegisterScreen;
+import com.revature.ecommerce_cli.screens.ReviewScreen;
 import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 
 import com.revature.ecommerce_cli.models.Product;
+import com.revature.ecommerce_cli.models.Review;
 import com.revature.ecommerce_cli.models.Session;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +23,7 @@ import com.revature.ecommerce_cli.DAO.CartProductDAO;
 import com.revature.ecommerce_cli.DAO.OrderDAO;
 import com.revature.ecommerce_cli.DAO.OrderProductDAO;
 import com.revature.ecommerce_cli.DAO.ProductDAO;
+import com.revature.ecommerce_cli.DAO.ReviewDAO;
 
 import java.util.Scanner;
 //returns screen 
@@ -60,18 +64,29 @@ public class RouterService {
             break;
             case "/searching":
                 new SearchingScreen(session, this, getProductService()).start(scan);
-            
+            default:
+                System.out.println("Invalid path");
         break;
         }
     }
-    public void navigate(String path, Scanner scanner, Product product) {
+    public void navigate(String path, Scanner scan, Product product) {
        
     
     switch(path){
         case "/product": 
-            new ProductScreen(product).start(scanner);
+            new ProductScreen(product, this, session, new OrderHistoryService(new OrderDAO(),new OrderProductDAO())).start(scan);
             break;
-        }
+        case "/review":
+            new ReviewScreen(product, getReviewService(), getUserService()).start(scan);
+            break;
+        
+        case "/addreview":
+            new AddReviewScreen(product, getReviewService(), this, session, new Review()).start(scan);
+            break;
+        default:
+            System.out.println("Invalid path");
+            break;
+    }
     
     }
     
@@ -99,6 +114,7 @@ private CartService getCartService(){
 private ProductService getProductService(){
     return new ProductService(new ProductDAO());
 }
+private ReviewService getReviewService(){
+    return new ReviewService(new ReviewDAO());
 
-
-}
+}}
