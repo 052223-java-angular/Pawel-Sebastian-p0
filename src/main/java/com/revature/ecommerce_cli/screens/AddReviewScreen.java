@@ -33,21 +33,22 @@ public class AddReviewScreen implements IScreen {
         addProductId();
         addUserId();
         addReviewID();
-        addRating(scan);
+        //addRating(scan);
         clearScreen();
         System.out.println("Welcome to the product review page for: " + product.getName() + "!");
-        System.out.println("Please enter your review: (x to go back) ");
-        System.out.println("Press Enter to continue:");
+       
+        System.out.println("\nPress Enter to continue (x to go back):");
         input = scan.nextLine();
 
         if(input.equals("x")){
             break;}
-        
+        addRating(scan);
         addReview(scan);
         saveReview();
+        clearScreen();
         System.out.println("Review added! Thanks for your feedback!");
 
-        System.out.println("Press Enter to go back to product page:");
+        System.out.println("\nPress Enter to go back to product page:");
         scan.nextLine();
         break;
 
@@ -58,9 +59,7 @@ public void addReview(Scanner scan) {
 
     while(true){
         clearScreen(); 
-        addRating(scan);
-
-
+        
         System.out.println("Please enter your review below: (x to go back) ");
         String input = scan.nextLine();
         if(review.equals("x")){
@@ -120,20 +119,6 @@ public void addRating(Scanner scan) {
     public void saveReview(){
         reviewService.saveReview(review);
     }
-   
-
-
-    
-
-
-//TODO - move method to verify that the user has write access to the product to the product page
-// public boolean verifyWriteAccess() {
-//     if (product.getOwner().getId() == session.getId()) {
-//         return true;
-//     } else {
-//         return false;
-//     }
-// }
 
 private void clearScreen() {
     System.out.print("\033[H\033[2J");

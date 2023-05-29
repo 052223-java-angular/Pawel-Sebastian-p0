@@ -74,7 +74,7 @@ public class RouterService {
     
     switch(path){
         case "/product": 
-            new ProductScreen(product, this).start(scan);
+            new ProductScreen(product, this, session, new OrderHistoryService(new OrderDAO(),new OrderProductDAO())).start(scan);
             break;
         case "/review":
             new ReviewScreen(product, getReviewService()).start(scan);

@@ -5,6 +5,7 @@ import com.revature.ecommerce_cli.DAO.OrderProductDAO;
 import com.revature.ecommerce_cli.DAO.OrderDAO;
 import com.revature.ecommerce_cli.DTO.OrderItem;
 import com.revature.ecommerce_cli.models.Order;
+import com.revature.ecommerce_cli.models.OrderProduct;
 
 import lombok.AllArgsConstructor;
 
@@ -23,5 +24,8 @@ public class OrderHistoryService {
 
     public List<OrderItem> getOrderItemsByOrderId(String orderId) {
         return orderProductDAO.findOrderItemsByOrderId(orderId);
+    }
+    public List<OrderProduct> getOrderProductsByOrderId(String orderId) {
+        return orderProductDAO.findByOrderId(orderId);
     }
 }
