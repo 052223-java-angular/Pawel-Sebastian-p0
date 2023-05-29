@@ -55,14 +55,14 @@ public class ProductScreen implements IScreen{
                 break;
             case "2":
                 clearScreen();
-                if(hasUserOrderedProduct(product.getId())){
+                //if(hasUserOrderedProduct(product.getId())){
                     router.navigate("/addreview", scan, product);
-                    input = "x";
-                }
-                else{
-                    System.out.println("You must purchase this product before you can review it.\n Press enter to continue");
-                    scan.nextLine();
-                }
+                    //input = "x";
+                //}
+                // else{
+                //     System.out.println("You must purchase this product before you can review it.\n Press enter to continue");
+                //     scan.nextLine();
+                // }
                 break;
             case "x":
                 break;
