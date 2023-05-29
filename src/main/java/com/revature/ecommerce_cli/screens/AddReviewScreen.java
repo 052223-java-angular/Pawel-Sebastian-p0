@@ -3,6 +3,9 @@ package com.revature.ecommerce_cli.screens;
 import java.util.Scanner;
 import java.util.UUID;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Review;
 import com.revature.ecommerce_cli.models.Session;
@@ -11,8 +14,7 @@ import com.revature.ecommerce_cli.services.RouterService;
 
 import lombok.AllArgsConstructor;
 
-import com.revature.ecommerce_cli.services.OrderHistoryService;
-
+//import com.revature.ecommerce_cli.services.OrderHistoryService;
 
 @AllArgsConstructor
 public class AddReviewScreen implements IScreen {
@@ -23,12 +25,13 @@ public class AddReviewScreen implements IScreen {
     private final Session session;
     private Review review;
 
+    private static final Logger logger = LogManager.getLogger(HomeScreen.class);
 
     @Override
     public void start(Scanner scan) {
 
     String input = "";
-
+    logger.debug("starting review adding screen");
     while(true){
         addProductId();
         addUserId();
@@ -44,6 +47,7 @@ public class AddReviewScreen implements IScreen {
             break;}
         addRating(scan);
         addReview(scan);
+        logger.trace("persisting review to database");
         saveReview();
         clearScreen();
         System.out.println("Review added! Thanks for your feedback!");
@@ -56,13 +60,16 @@ public class AddReviewScreen implements IScreen {
 }
 
 public void addReview(Scanner scan) {
-
+    logger.debug("adding review comment");
     while(true){
-        System.out.println("Please enter your review below: (x to go back) ");
+        System.out.println("Please enter your review below: (x to cancel) ");
         String input = scan.nextLine();
         if(input.equals("x")){
+            logger.trace("review comment cancelled");
+            review.setComment("");
             break;
         }else{
+            logger.trace("setting review comment");
             review.setComment(input);
             break;
         }
@@ -85,6 +92,7 @@ public void addUserId(){
 
 public void addRating(Scanner scan) {
 
+    logger.debug("adding rating in review");
     clearScreen();
     while(true){
         System.out.println("Please enter your rating (a number between 1 and 5): (x to go back) ");
@@ -99,11 +107,13 @@ public void addRating(Scanner scan) {
                     throw new NumberFormatException();
                 }else{
                 
+                    logger.trace("setting review rating");
                     review.setRating(intRating);
                     break;
                 }
             }
             catch(NumberFormatException e){
+                logger.trace("rating out of range");
                 System.out.println("Invalid rating, please enter a number between 1 and 5");
                 continue;
             }
@@ -112,6 +122,7 @@ public void addRating(Scanner scan) {
 }
    
     public void saveReview(){
+        logger.debug("saving review");
         reviewService.saveReview(review);
     }
 
