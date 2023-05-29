@@ -24,4 +24,8 @@ public class ReviewService {
     //     Optional<Review> reviewOpt = reviewDAO.findById(id);
     //     return reviewOpt.orElseThrow(ReviewNotFoundException::new);
     // }
+
+    public void saveReview(Review review) {
+        reviewDAO.save(review);
+    }
 }

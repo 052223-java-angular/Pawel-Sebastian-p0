@@ -23,7 +23,7 @@ public class ProductScreen implements IScreen{
     public void start(Scanner scan) {
     
     String input = "";
-    log
+    //log
     while(true){
         logger.debug("Redrawing");
         clearScreen();

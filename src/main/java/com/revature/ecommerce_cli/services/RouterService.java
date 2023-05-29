@@ -1,5 +1,6 @@
 package com.revature.ecommerce_cli.services;
 
+import com.revature.ecommerce_cli.screens.AddReviewScreen;
 import com.revature.ecommerce_cli.screens.BrowsingScreen;
 import com.revature.ecommerce_cli.screens.HomeScreen;
 import com.revature.ecommerce_cli.screens.MenuScreen;
@@ -12,6 +13,7 @@ import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 
 import com.revature.ecommerce_cli.models.Product;
+import com.revature.ecommerce_cli.models.Review;
 import com.revature.ecommerce_cli.models.Session;
 
 import lombok.AllArgsConstructor;
@@ -62,7 +64,8 @@ public class RouterService {
             break;
             case "/searching":
                 new SearchingScreen(session, this, getProductService()).start(scan);
-            
+            default:
+                System.out.println("Invalid path");
         break;
         }
     }
@@ -76,7 +79,14 @@ public class RouterService {
         case "/review":
             new ReviewScreen(product, getReviewService()).start(scan);
             break;
-        }
+        
+        case "/addreview":
+            new AddReviewScreen(product, getReviewService(), this, session, new Review()).start(scan);
+            break;
+        default:
+            System.out.println("Invalid path");
+            break;
+    }
     
     }
     
