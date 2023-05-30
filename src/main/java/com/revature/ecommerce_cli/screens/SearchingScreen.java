@@ -63,28 +63,15 @@ public class SearchingScreen implements IScreen {
                     case "x":
                         
                         break exit;
-
-
-
-
+                }
             }
-
-
-
-            }
-    }
-    
-
-        
-
+        }
     }
 
 //--------------------------------------Helper Methods ---------------------------------------
 
 
 public void productSearch(Scanner scan, String input){
-    
-    
         while(true){
         System.out.println("-Searching by Product Name ");
         System.out.println("\n-Enter Product Name:\n  ");
@@ -103,26 +90,25 @@ public void productSearch(Scanner scan, String input){
         else{
             logger.trace("building product name search results");
             clearScreen();
-            System.out.println("\n-Products found:");
-            System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
-            
-            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item #" , "Name:", "Category:", "Price", "In Stock", "Description");
-            for(int i = 0; i < products.size(); i++){
-                Product product = products.get(i);
-                System.out.printf("%-5d  %-20s %-15s %-10d %-10d 1%-20s%n", i +1, product.getName(), 
-                product.getCategory(), product.getPrice(), product.getInStock(), 
-                product.getDescription());
+            do {
+                System.out.println("\n-Products found:");
+                System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
+                
+                System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s\n",  "Item #" , "Name:", "Category:", "Price", "In Stock", "Description");
+                for(int i = 0; i < products.size(); i++){
+                    Product product = products.get(i);
+                    System.out.printf("%-5d  %-20s %-15s %-10s %-10d %-20s\n", i +1, product.getName(), 
+                    product.getCategory(), PriceUtil.centsToString(product.getPrice()), product.getInStock(), 
+                    product.getDescription());
+                }
                 input = scan.nextLine();
                 if(input.equals("x")){
-                    break;
+                    return;
                 }
-                
-                
-            }
-            logger.debug("Navigated to Product Page");
-            getProductPage(scan, input, products);
+                logger.debug("Navigated to Product Page");
+            } while(!getProductPage(scan, input, products));
         }
-        break;
+        return;
     }
 
 }
@@ -173,57 +159,51 @@ public void categorySearch(Scanner scan, String input){
         }
         else{
             clearScreen();
-            logger.trace("building product list from category results");
-            System.out.println("\n-Products found (x to go back): \n ");
-            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item  #", "Name:", "Category:", "Price", "In Stock", "Description");
-            
-            for(int i = 0; i < products.size(); i++){   
-                Product product = products.get(i);
-                System.out.printf("%-5d %-20s %-15s %-10s %-10d %-20s%n", i+1, product.getName(), 
-                product.getCategory(), PriceUtil.centsToString(product.getPrice()), product.getInStock(), 
-                product.getDescription());
+            do {
+                logger.trace("building product list from category results");
+                System.out.println("\n-Products found (x to go back): \n ");
+                System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s\n",  "Item  #", "Name:", "Category:",
+                    "Price", "In Stock", "Description");
                 
-            }
-            
-                }
-                input = scan.nextLine();
-                if(input.equalsIgnoreCase("x")){    
+                for(int i = 0; i < products.size(); i++){   
+                    Product product = products.get(i);
+                    System.out.printf("%-5d %-20s %-15s %-10s %-10d %-20s\n", i+1, product.getName(), 
+                    product.getCategory(), PriceUtil.centsToString(product.getPrice()), product.getInStock(), 
+                    product.getDescription());
                     
-                    break;
-            }
-            logger.trace("Going to 'get products' page");
-            getProductPage(scan, input, products);}
+                }
+                
+                    input = scan.nextLine();
+                    if(input.equalsIgnoreCase("x")){    
+                        return;
+                }
+                logger.trace("Going to 'get products' page");
+            } while(!getProductPage(scan, input, products));
         }
+        return;
+    }
+}
         
     
 
-public void getProductPage(Scanner scan, String input, List<Product> products){
-    
+public boolean getProductPage(Scanner scan, String input, List<Product> products){
         int productNum;
         try {
             productNum = Integer.parseInt(input);
+            if (productNum < 1 || productNum > products.size()) throw new NumberFormatException();
         } catch(NumberFormatException e) {
             logger.debug("invalid product input on products results page");
+            clearScreen();
             System.out.println("Invalid input. Please enter a valid product number.");
-            return;
+            return false;
         }
-        if (productNum < 1 || productNum > products.size()) {
-            System.out.println("Invalid product number. Please enter a number between 1 and " + products.size() + ".");
-            logger.debug("product number out of range on product results page");
-            return;
-        }
-    
         Product selectedProduct = products.get(productNum - 1);
     
         // Navigate to product screen
         logger.debug("navigating to product page for ", selectedProduct.getName());
         router.navigate("/product", scan, selectedProduct);
+        return true;
     }
-    
-
-        
-
-    
 
 public List<Product> searchProductByCategory(String input){
     List<Product> products = productService.getByCategory(input);
@@ -233,15 +213,12 @@ public List<Product> searchProductByCategory(String input){
         return Collections.emptyList();
     }
     return products;
-
-
-
 }
 
 public void priceSearch(Scanner scan, String input){
     logger.debug("navigated to price search");
+    clearScreen();
     while(true){
-        clearScreen();
         System.out.println("-Searching by Product Price ");
         System.out.print("\n-Enter Product Price Lower Bound ($x.xx):\n  $");
         input = scan.nextLine().trim();
@@ -268,46 +245,44 @@ public void priceSearch(Scanner scan, String input){
             continue;
         }
 
-
         List<Product> products = productService.getByPrice(lowerBoundCents, upperBoundCents);
         if(products.isEmpty()){
+            clearScreen();
             logger.debug("no results for price search");
             System.out.println("No products found with that price, search again: ");
             continue;
         }
         else{
             clearScreen();
-            logger.trace("drawing price search result screen");
-            System.out.println("\n-Products found:");
-            System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
-            
-            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item #" , "Name:", "Category:",
-                "Price", "In Stock", "Description");
-            for(int i = 0; i < products.size(); i++){
-                Product product = products.get(i);
-                System.out.printf("%-5d  %-20s %-15s %-10s %-10d %-20s%n", i +1, product.getName(), 
-                product.getCategory(), PriceUtil.centsToString(product.getPrice()), product.getInStock(), 
-                product.getDescription());
+            do {
+                logger.trace("drawing price search result screen");
+                System.out.println("\n-Products found:");
+                System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
                 
+                System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s\n",  "Item #" , "Name:", "Category:",
+                    "Price", "In Stock", "Description");
+                for(int i = 0; i < products.size(); i++){
+                    Product product = products.get(i);
+                    System.out.printf("%-5d  %-20s %-15s %-10s %-10d %-20s\n", i +1, product.getName(), 
+                    product.getCategory(), PriceUtil.centsToString(product.getPrice()), product.getInStock(), 
+                    product.getDescription());
+                    
+                }
+                input = scan.nextLine();
+                if(input.equals("x")){
+                    return;
+                }
+                logger.debug("navigating to product page");
                 
-            }
-            input = scan.nextLine();
-            if(input.equals("x")){
-                break;
-            }
-            logger.debug("navigating to product page");
-            getProductPage(scan, input, products);
+            } while(!getProductPage(scan, input, products));
         }
-        break;
+        return;
     }
-
 }
 
 private void clearScreen() {
     System.out.print("\033[H\033[2J");
     System.out.flush();
     }
-
-
 }
 
