@@ -21,18 +21,18 @@ public class AddReviewScreen implements IScreen {
     private ReviewService reviewService;
     private final RouterService router;
     private final Session session;
-    private Review review;
 
 
     @Override
     public void start(Scanner scan) {
+        Review review = new Review();
 
     String input = "";
 
     while(true){
-        addProductId();
-        addUserId();
-        addReviewID();
+        addProductId(review);
+        addUserId(review);
+        addReviewID(review);
         //addRating(scan);
         clearScreen();
         System.out.println("Welcome to the product review page for: " + product.getName() + "!");
@@ -41,10 +41,10 @@ public class AddReviewScreen implements IScreen {
         input = scan.nextLine();
 
         if(input.equals("x")){
-            break;}
-        addRating(scan);
-        addReview(scan);
-        saveReview();
+            return;}
+        if(addRating(scan, review)) return;
+        addReview(scan, review);
+        saveReview(review);
         clearScreen();
         System.out.println("Review added! Thanks for your feedback!");
 
@@ -55,10 +55,10 @@ public class AddReviewScreen implements IScreen {
     }
 }
 
-public void addReview(Scanner scan) {
+public void addReview(Scanner scan, Review review) {
 
     while(true){
-        System.out.println("Please enter your review below: (x to go back) ");
+        System.out.println("Please enter your review below: (x to leave blank) ");
         String input = scan.nextLine();
         if(input.equals("x")){
             break;
@@ -70,20 +70,20 @@ public void addReview(Scanner scan) {
    
 }
 
-public void addProductId(){
+public void addProductId(Review review){
     review.setProductId(product.getId());
 }
 
-public void addReviewID(){
+public void addReviewID(Review review){
     String id = UUID.randomUUID().toString();
     review.setId(id);
 }
 
-public void addUserId(){
+public void addUserId(Review review){
     review.setUserId(session.getId());
 }
 
-public void addRating(Scanner scan) {
+public boolean addRating(Scanner scan, Review review) {
 
     clearScreen();
     while(true){
@@ -91,7 +91,7 @@ public void addRating(Scanner scan) {
         String rating = "";
         rating = scan.nextLine();
         if(rating.equals("x")){
-            break;
+            return true;
         }else{
             try{
                 int intRating = Integer.parseInt(rating);
@@ -100,7 +100,7 @@ public void addRating(Scanner scan) {
                 }else{
                 
                     review.setRating(intRating);
-                    break;
+                    return false;
                 }
             }
             catch(NumberFormatException e){
@@ -111,7 +111,7 @@ public void addRating(Scanner scan) {
     }
 }
    
-    public void saveReview(){
+    public void saveReview(Review review){
         reviewService.saveReview(review);
     }
 
