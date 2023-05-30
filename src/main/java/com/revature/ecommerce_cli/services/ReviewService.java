@@ -15,7 +15,7 @@ public class ReviewService {
     public List<Review> getAll() {
         return reviewDAO.findAll();
     }
-    
+
     public List<Review> getReviewsByProductId(String productId) {
         return reviewDAO.findByProductId(productId);
     }
@@ -24,8 +24,14 @@ public class ReviewService {
     //     Optional<Review> reviewOpt = reviewDAO.findById(id);
     //     return reviewOpt.orElseThrow(ReviewNotFoundException::new);
     // }
+    public Optional<Review> getByProductIdUserId(String productId, String userId) {
+        return reviewDAO.findByProductIdUserId(productId, userId);
+    }
 
     public void saveReview(Review review) {
         reviewDAO.save(review);
+    }
+    public void updateReview(Review review) {
+        reviewDAO.update(review);
     }
 }

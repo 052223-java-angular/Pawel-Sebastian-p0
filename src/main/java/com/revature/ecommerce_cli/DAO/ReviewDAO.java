@@ -200,4 +200,34 @@ public class ReviewDAO implements CrudDAO<Review> {
         return retArray;
     }
     //sql for searching given product name and user name?
+    public Optional<Review> findByProductIdUserId(String productId, String userId) {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT * FROM reviews WHERE product_id = ? AND user_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, productId);
+                ps.setString(2, userId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        Review review = new Review();
+                        review.setId(rs.getString("id"));
+                        review.setRating(rs.getInt("rating"));
+                        review.setComment(rs.getString("comment"));
+                        review.setUserId(rs.getString("user_id"));
+                        review.setProductId(rs.getString("product_id"));
+                        return Optional.of(review);
+                    } else return Optional.empty();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }
