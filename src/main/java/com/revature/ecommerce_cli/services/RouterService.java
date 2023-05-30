@@ -13,7 +13,6 @@ import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 
 import com.revature.ecommerce_cli.models.Product;
-import com.revature.ecommerce_cli.models.Review;
 import com.revature.ecommerce_cli.models.Session;
 
 import lombok.AllArgsConstructor;
