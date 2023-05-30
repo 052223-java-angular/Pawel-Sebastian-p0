@@ -9,6 +9,7 @@ import com.revature.ecommerce_cli.DAO.OrderDAO;
 import com.revature.ecommerce_cli.DAO.CartProductDAO;
 import com.revature.ecommerce_cli.DAO.OrderProductDAO;
 import com.revature.ecommerce_cli.models.Session;
+import com.revature.ecommerce_cli.services.OrderService;
 
 import lombok.AllArgsConstructor;
 
@@ -17,6 +18,7 @@ import lombok.AllArgsConstructor;
 public class CheckoutScreen implements IScreen {
 
 private Session session;
+private OrderService orderService;
 
     @Override
     public void start(Scanner scan){
@@ -51,7 +53,7 @@ private Session session;
                 
                 }
 
-                createNewOrder();
+                orderService.placeOrder(session.getId());
             }
         }
         
@@ -75,14 +77,17 @@ private Session session;
             }
             return false;
         }
-        public void createNewOrder(){
+        
 
 
 
             
-        }
+        
     private void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         }
+
+    public CheckoutScreen(String path, Scanner scan, Session session2) {
+    }
 }

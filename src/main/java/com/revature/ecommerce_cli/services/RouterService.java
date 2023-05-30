@@ -14,6 +14,9 @@ import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 import com.revature.ecommerce_cli.models.CartProduct;
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
+import com.revature.ecommerce_cli.screens.CheckoutScreen;
+import com.revature.ecommerce_cli.services.OrderService;
+
 
 import lombok.AllArgsConstructor;
 
@@ -44,9 +47,8 @@ public class RouterService {
                 new LoginScreen(getUserService(), this, session).start(scan);
                 break;
             case "/shopping_cart":
-                new ShoppingCartScreen(getCartService(), session).start(scan);
-
-            break;
+                new ShoppingCartScreen(getCartService(),session, this).start(scan);
+                break;
             case "/order_history":
                 new OrderHistoryScreen(getOrderHistoryService(), getProductService(), session, this).start(scan);
                 
@@ -82,12 +84,20 @@ public class RouterService {
         case "/addreview":
             new AddReviewScreen(product, getReviewService(), this, session).start(scan);
             break;
+        case "/checkout":
+            new CheckoutScreen(path, scan, session).start(scan);
+            break;
         default:
             System.out.println("Invalid path");
             break;
     }
-    
     }
+    
+    
+    
+    
+    
+    
     
 
 
