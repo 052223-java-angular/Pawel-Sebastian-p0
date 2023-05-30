@@ -153,7 +153,7 @@ public class UserDAO implements CrudDAO<User> {
                         user.setUsername(rs.getString("username"));
                         user.setPassword(rs.getString("password"));
                         return Optional.of(user);
-                    }
+                    } else return Optional.empty();
                 }
             }
         } catch (SQLException e) {
@@ -165,9 +165,6 @@ public class UserDAO implements CrudDAO<User> {
             System.out.println("couldn't find postgres driver for jdbc");
             throw new RuntimeException(e.getMessage());
         }
-
-
-        return Optional.empty();
     }
 
     public Optional<String> findUsernameById(String id) {

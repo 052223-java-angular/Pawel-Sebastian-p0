@@ -30,64 +30,59 @@ public class ProductScreen implements IScreen{
    
     @Override
     public void start(Scanner scan) {
-    
-    String input = "";
-    //log
-    while(true){
-        logger.debug("Redrawing");
-        clearScreen();
-        System.out.println("Product: " + product.getName() + "\n Price: " 
-        + PriceUtil.centsToString(product.getPrice()) + "\nCategory: " 
-        + product.getCategory() + "\nIn Stock: " 
-        + product.getInStock() + "\nDescription: "
-        + product.getDescription() + "\n");
-        
-        System.out.println("[1] View Reviews for this Product");
-        System.out.println("[2] Add Review for this Product");
-        System.out.println("[x] Exit");
-        System.out.print("\nEnter: ");
-        input = scan.nextLine();
+        boolean hasReviewed = false;    
+        String input = "";
+        while(true){
+            logger.debug("Redrawing");
+            clearScreen();
+            System.out.println("Product: " + product.getName() + "\n Price: " 
+            + PriceUtil.centsToString(product.getPrice()) + "\nCategory: " 
+            + product.getCategory() + "\nIn Stock: " 
+            + product.getInStock() + "\nDescription: "
+            + product.getDescription() + "\n");
+            
+            System.out.println("[1] View Reviews for this Product");
+            System.out.println("[2] Add Review for this Product");
+            System.out.println("[x] Exit");
+            System.out.print("\nEnter: ");
+            input = scan.nextLine();
 
-
-        clearScreen();
-        switch(input){
-            case "1":
-                router.navigate("/review", scan, product);
-                break;
-            case "2":
-                /*
-                if(orderHistoryService.hasUserOrderedProduct(product.getId(), session.getId())){
-                */
+            clearScreen();
+            switch(input){
+                case "1":
+                    router.navigate("/review", scan, product);
+                    break;
+                case "2":
+                    /*
+                    if(orderHistoryService.hasUserOrderedProduct(product.getId(), session.getId()))
+                    */
                     router.navigate("/addreview", scan, product);
-                /*
-                    input = "x";
-                }
-                 else{
-                     System.out.println("You must purchase this product before you can review it.\n Press enter to continue");
-                     scan.nextLine();
-                 }
-                 */
-                break;
-            case "x":
-                break;
+                    /*
+                        input = "x";
+                    }
+                    else{
+                         System.out.println("You must purchase this product before you can review it.\n Press enter to continue");j
+                         scan.nextLine();
+                    }
+                    */
+                    break;
+                case "x":
+                    return;
 
-            default:
+                default:
+                    System.out.println("Invalid input");
+                    System.out.print("Press Enter: ");
+                    scan.nextLine();
+                    break;
+            }
+            if(input.equals("x")){
+                break;
+            }else{
                 System.out.println("Invalid input");
-                System.out.print("Press Enter: ");
-                scan.nextLine();
-                break;
+            }
         }
-        if(input.equals("x")){
-            break;
-        }else{
-            System.out.println("Invalid input");
-        }
-    }
-    
-    
     }
 
-      
     private void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
