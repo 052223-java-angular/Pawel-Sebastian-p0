@@ -1,8 +1,7 @@
 package com.revature.ecommerce_cli.screens;
 
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import lombok.AllArgsConstructor;
 
 import java.util.Collection;
@@ -18,17 +17,15 @@ import com.revature.ecommerce_cli.util.PriceUtil;
 
 @AllArgsConstructor
 public class SearchingScreen implements IScreen {
-    //private static final Logger logger = LogManager.getLogger(SearchingScreen.class);
     private Session session;
     private final RouterService router;
     private final ProductService productService;
-    
-
+    private static final Logger logger = LogManager.getLogger(SearchingScreen.class);
 
     @Override
     public void start(Scanner scan){
         String input = "";
-        //logger.info("Navigated to Searching Screen");
+        logger.debug("Navigated to Searching Screen");
 
         exit: {
 
@@ -48,14 +45,17 @@ public class SearchingScreen implements IScreen {
                 switch(input.toLowerCase()){
                     case "1":
                         clearScreen();
+                        logger.debug("Navigated to Name Searching Screen");
                         productSearch(scan, input);
                         break;
                     case "2":
                         clearScreen();
+                        logger.debug("Navigated to Name Searching Screen");
                         categorySearch(scan, input);
                         break;
                     case "3":
                         clearScreen();
+                        logger.debug("Navigated to Name Searching Screen");
                         priceSearch(scan, input);
                         break;
                 
@@ -96,10 +96,12 @@ public void productSearch(Scanner scan, String input){
         }
         List<Product> products = searchProductByName(input);
         if(products.isEmpty()){
+            logger.trace("product search results empty");
             System.out.println("No products found with that name, search again: ");
             continue;
         }
         else{
+            logger.trace("building product name search results");
             clearScreen();
             System.out.println("\n-Products found:");
             System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
@@ -117,6 +119,7 @@ public void productSearch(Scanner scan, String input){
                 
                 
             }
+            logger.debug("Navigated to Product Page");
             getProductPage(scan, input, products);
         }
         break;
@@ -141,6 +144,8 @@ public void categorySearch(Scanner scan, String input){
         clearScreen();
         System.out.println("-Searching by Product Category ");
 
+        logger.trace("listing product categories");
+
         System.out.println("\n-Product Categories: \n");
         for(int i = 0; i < categoryList.size(); i++){
             System.out.println("[" + (i+1) + "] " + categoryList.get(i));
@@ -153,6 +158,7 @@ public void categorySearch(Scanner scan, String input){
         }
         else if(input.isEmpty() || !categoryList.contains(input)){
             clearScreen();
+            logger.trace("invalid product category");
             System.out.println("Invalid product category, please enter a valid product category.");
             System.out.println("Press Enter to try again.");
             scan.nextLine();
@@ -161,11 +167,13 @@ public void categorySearch(Scanner scan, String input){
         
         List<Product> products = searchProductByCategory(input);
         if(products.isEmpty()){
+            logger.trace("invalid product category - no results");
             System.out.println("No products found with that category, search again: ");
             continue;
         }
         else{
             clearScreen();
+            logger.trace("building product list from category results");
             System.out.println("\n-Products found (x to go back): \n ");
             System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item  #", "Name:", "Category:", "Price", "In Stock", "Description");
             
@@ -183,6 +191,7 @@ public void categorySearch(Scanner scan, String input){
                     
                     break;
             }
+            logger.trace("Going to 'get products' page");
             getProductPage(scan, input, products);}
         }
         
@@ -194,17 +203,20 @@ public void getProductPage(Scanner scan, String input, List<Product> products){
         try {
             productNum = Integer.parseInt(input);
         } catch(NumberFormatException e) {
+            logger.debug("invalid product input on products results page");
             System.out.println("Invalid input. Please enter a valid product number.");
             return;
         }
         if (productNum < 1 || productNum > products.size()) {
             System.out.println("Invalid product number. Please enter a number between 1 and " + products.size() + ".");
+            logger.debug("product number out of range on product results page");
             return;
         }
     
         Product selectedProduct = products.get(productNum - 1);
     
         // Navigate to product screen
+        logger.debug("navigating to product page for ", selectedProduct.getName());
         router.navigate("/product", scan, selectedProduct);
     }
     
@@ -216,6 +228,7 @@ public void getProductPage(Scanner scan, String input, List<Product> products){
 public List<Product> searchProductByCategory(String input){
     List<Product> products = productService.getByCategory(input);
     if(products.isEmpty()){
+        logger.debug("search Product by category " + input + "yielded no results");
         System.out.println("No products found with that category, ");
         return Collections.emptyList();
     }
@@ -226,6 +239,7 @@ public List<Product> searchProductByCategory(String input){
 }
 
 public void priceSearch(Scanner scan, String input){
+    logger.debug("navigated to price search");
     while(true){
         clearScreen();
         System.out.println("-Searching by Product Price ");
@@ -237,6 +251,7 @@ public void priceSearch(Scanner scan, String input){
 
         }catch(NumberFormatException e){
             System.out.println("Invalid price format (x.xx).");
+            logger.debug("invalid price search lower bound");
             continue;
         }
 
@@ -249,21 +264,25 @@ public void priceSearch(Scanner scan, String input){
         }
         catch(NumberFormatException e){
             System.out.println("Invalid price format (x.xx).");
+            logger.debug("invalid price search upper bound");
             continue;
         }
 
 
         List<Product> products = productService.getByPrice(lowerBoundCents, upperBoundCents);
         if(products.isEmpty()){
+            logger.debug("no results for price search");
             System.out.println("No products found with that price, search again: ");
             continue;
         }
         else{
             clearScreen();
+            logger.trace("drawing price search result screen");
             System.out.println("\n-Products found:");
             System.out.println("\n-Enter item number to proceed to product page, x to go back: \n");
             
-            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item #" , "Name:", "Category:", "Price", "In Stock", "Description");
+            System.out.printf("%-5s %-20s %-15s %-10s %-10s %-20s%n",  "Item #" , "Name:", "Category:",
+                "Price", "In Stock", "Description");
             for(int i = 0; i < products.size(); i++){
                 Product product = products.get(i);
                 System.out.printf("%-5d  %-20s %-15s %-10s %-10d %-20s%n", i +1, product.getName(), 
@@ -276,6 +295,7 @@ public void priceSearch(Scanner scan, String input){
             if(input.equals("x")){
                 break;
             }
+            logger.debug("navigating to product page");
             getProductPage(scan, input, products);
         }
         break;
