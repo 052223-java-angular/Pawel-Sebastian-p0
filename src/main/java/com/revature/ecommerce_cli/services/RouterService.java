@@ -11,7 +11,7 @@ import com.revature.ecommerce_cli.screens.RegisterScreen;
 import com.revature.ecommerce_cli.screens.ReviewScreen;
 import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
-
+import com.revature.ecommerce_cli.models.CartProduct;
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
 
@@ -73,7 +73,7 @@ public class RouterService {
     
     switch(path){
         case "/product": 
-            new ProductScreen(product, this, session, new OrderHistoryService(new OrderDAO(),new OrderProductDAO())).start(scan);
+        new ProductScreen(product, this, session, new OrderHistoryService(new OrderDAO(),new OrderProductDAO()), new CartProduct(), new CartService(new CartProductDAO())).start(scan);
             break;
         case "/review":
             new ReviewScreen(product, getReviewService(), getUserService()).start(scan);
