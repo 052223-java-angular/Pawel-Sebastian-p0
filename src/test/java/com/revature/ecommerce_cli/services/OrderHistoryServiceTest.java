@@ -16,6 +16,7 @@ import static org.mockito.Mockito.*;
 
 import static org.junit.Assert.*;
 
+import com.revature.ecommerce_cli.models.OrderProduct;
 import com.revature.ecommerce_cli.models.Order;
 import com.revature.ecommerce_cli.DAO.OrderProductDAO;
 import com.revature.ecommerce_cli.DAO.OrderDAO;
@@ -79,5 +80,23 @@ public class OrderHistoryServiceTest {
         assertEquals(orderItemList.get(0).getUnitPrice(), actual.get(0).getUnitPrice());
 
         verify(orderProductDAO, times(1)).findOrderItemsByOrderId("904cf680-fdff-11ed-be56-0242ac120002");
+    }
+
+    @Test
+    public void getOrderProductsByOrderIdTest() {
+        List<OrderProduct> orderProducts = new ArrayList<OrderProduct>();
+        orderProducts.add(new OrderProduct("4148137f-2cbf-4e72-9515-6b3eb27161fc", 
+            "904cf680-fdff-11ed-be56-0242ac120002", "78a727c1-fbb8-49ea-a63a-3b553f417634", 22));
+        orderProducts.add(new OrderProduct("7fdc9962-66cc-49b3-86ec-17af2dfb5237",
+            "904cf680-fdff-11ed-be56-0242ac120002", "503653b3-9f7c-47f5-923f-9018bd2d4d5b", 2));
+
+        when(orderProductDAO.findByOrderId("904cf680-fdff-11ed-be56-0242ac120002")).
+            thenReturn(orderProducts);
+        List<OrderProduct> actual = orderHistoryService.
+            getOrderProductsByOrderId("904cf680-fdff-11ed-be56-0242ac120002");
+        assertEquals(orderProducts.get(1).getQuantity(), actual.get(1).getQuantity());
+        assertEquals(orderProducts.get(0).getProductId(), actual.get(0).getProductId());
+
+        verify(orderProductDAO, times(1)).findByOrderId("904cf680-fdff-11ed-be56-0242ac120002");
     }
 } 

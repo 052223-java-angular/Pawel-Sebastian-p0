@@ -85,4 +85,15 @@ public class UserServiceTest {
         assertTrue(userService.isSamePassword(password, confirmPassword));
         assertFalse(userService.isSamePassword(password, differentPassword));
     }
+
+    @Test
+    public void testGetById() {
+
+        when(userDAO.findById("d8ed2547-f5ab-4842-a32b-629d65c7491b")).thenReturn(Optional.of(new
+            User("d8ed2547-f5ab-4842-a32b-629d65c7491b", "gertrude",
+            "bce3035e-5554-4da7-adaa-0958533ed1ed")));
+        assertEquals("gertrude", userService.getById("d8ed2547-f5ab-4842-a32b-629d65c7491b").getUsername());
+
+        verify(userDAO, times(1)).findById("d8ed2547-f5ab-4842-a32b-629d65c7491b");
+    }
 }
