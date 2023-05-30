@@ -15,7 +15,6 @@ import com.revature.ecommerce_cli.util.ConnectionFactory;
 
 // This is the chef
 public class ReviewDAO implements CrudDAO<Review> {
-
     @Override
     public void save(Review obj) {
         try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
