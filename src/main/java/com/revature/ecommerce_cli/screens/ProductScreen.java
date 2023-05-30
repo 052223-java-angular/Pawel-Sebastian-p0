@@ -43,6 +43,7 @@ public class ProductScreen implements IScreen{
         
         System.out.println("[1] View Reviews for this Product");
         System.out.println("[2] Add Review for this Product");
+        System.out.println("[3] Add to Cart");
         System.out.println("[x] Exit");
         System.out.print("\nEnter: ");
         input = scan.nextLine();
@@ -66,7 +67,9 @@ public class ProductScreen implements IScreen{
                      scan.nextLine();
                  }
                  */
-                break;
+                case "3":
+                    router.navigate("/cart", scan, product);
+                    break;
             case "x":
                 break;
 
