@@ -22,14 +22,13 @@ public class ReviewScreen implements IScreen{
     @Override
     public void start(Scanner scan) {
     
-    String input = "";
     while(true){
         clearScreen();
         System.out.println("Welcome to the Review Page for " + product.getName() + "!\n");
         displayReviews();
 
         System.out.print("\nPress Enter to return: ");
-        input = scan.nextLine();
+        scan.nextLine();
         /*if(input.equals("x")){
             break;
         }else{
