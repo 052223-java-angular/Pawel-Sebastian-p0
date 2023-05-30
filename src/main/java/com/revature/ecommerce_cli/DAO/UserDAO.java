@@ -153,6 +153,32 @@ public class UserDAO implements CrudDAO<User> {
                         user.setUsername(rs.getString("username"));
                         user.setPassword(rs.getString("password"));
                         return Optional.of(user);
+                    } else return Optional.empty();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public Optional<String> findUsernameById(String id) {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT username FROM users WHERE id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String username;
+                        username = rs.getString("username");
+                        return Optional.of(username);
                     }
                 }
             }
@@ -169,5 +195,4 @@ public class UserDAO implements CrudDAO<User> {
 
         return Optional.empty();
     }
-
 }

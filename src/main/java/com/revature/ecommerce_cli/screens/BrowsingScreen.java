@@ -43,41 +43,37 @@ public class BrowsingScreen implements IScreen{
                 for (int i = 0; i < productList.size(); i++) {
                 Product product = productList.get(i);
                 // Assuming the Product class has a toString() method to print details of the product
-                System.out.printf("[%2d] View : %-20s -Current Stock: %d\n", (i + 1), product.getName(), product.getInStock());
-
-            }
+                System.out.printf("[%2d] View : %-20s -Current Stock: %d\n", (i + 1), product.getName(),
+                        product.getInStock());
+                }
                 
                 System.out.println("\n[x] Exit");
                 System.out.print("\nEnter: ");
                 input = scan.nextLine();
                 
-                try{ 
+                try {
                     int productIndex = Integer.parseInt(input) -1; 
                     if(productIndex >= 0 && productIndex < productList.size()){
                         Product product = productList.get(productIndex);
                         System.out.println("You selected: " + product.getName());
                         router.navigate("/product", scan, productList.get(productIndex));
+                        return;
+                    } else throw new NumberFormatException();
+                } catch(NumberFormatException e) {
+                    switch (input) {
+                        case "x":
+                            logger.info("User exiting out");
+                            break exit;
+                        default:
+                            clearScreen();
+                            System.out.println("\nInvalid Option!");
+                            System.out.println("\nPress enter to continue...");
+                            logger.trace("Browsing screen invalid option");
+                            scan.nextLine();
+                            break;
                     }
-                else{
-                    logger.warn("Invalid option!");
-                    clearScreen();
-                }
-            }catch(NumberFormatException e){
-                switch (input) {
-                    case "x":
-                        logger.info("User signed out");
-                        break exit;
-                    default:
-                        logger.warn("Invalid option!");
-                        clearScreen();
                 }
             }
-        }
-
-
-
-
-                
         }
     }
 
