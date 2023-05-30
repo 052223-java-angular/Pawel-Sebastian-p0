@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 
 import com.revature.ecommerce_cli.services.OrderHistoryService;
 import com.revature.ecommerce_cli.services.RouterService;
+import com.revature.ecommerce_cli.util.PriceUtil;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +37,7 @@ public class ProductScreen implements IScreen{
         logger.debug("Redrawing");
         clearScreen();
         System.out.println("Product: " + product.getName() + "\n Price: " 
-        + product.getPrice() + "\nCategory: " 
+        + PriceUtil.centsToString(product.getPrice()) + "\nCategory: " 
         + product.getCategory() + "\nIn Stock: " 
         + product.getInStock() + "\nDescription: "
         + product.getDescription() + "\n");

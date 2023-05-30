@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import lombok.AllArgsConstructor;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -58,11 +57,15 @@ public class SearchingScreen implements IScreen {
                         logger.debug("Navigated to Name Searching Screen");
                         priceSearch(scan, input);
                         break;
-                
-
                     case "x":
-                        
-                        break exit;
+                        return;
+                    default:
+                        clearScreen();
+                        System.out.println("\nInvalid Option!");
+                        System.out.println("\nPress enter to continue...");
+                        logger.trace("Browsing screen invalid option");
+                        scan.nextLine();
+                        continue;
                 }
             }
         }
