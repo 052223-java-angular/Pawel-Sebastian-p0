@@ -25,12 +25,14 @@ public class ReviewScreen implements IScreen{
     @Override
     public void start(Scanner scan) {
     logger.debug("starting review screen for " + product.getName());
+
     while(true){
         clearScreen();
         System.out.println("Welcome to the Review Page for " + product.getName() + "!\n");
         displayReviews();
 
         System.out.print("\nPress Enter to return: ");
+        scan.nextLine();
         /*if(input.equals("x")){
             break;
         }else{
@@ -53,8 +55,8 @@ public class ReviewScreen implements IScreen{
 public void displayReviews() {
     List<Review> reviews = reviewService.getReviewsByProductId(product.getId());
     for (Review review : reviews) {
-        System.out.println("User: " + userService.getById(review.getUserId()).getUsername());
+        System.out.println("User: " + userService.getUsernameById(review.getUserId()));
         System.out.println("Rating: " + review.getRating());
-        System.out.println("Comment: \n" + review.getComment() + "\n");
+        System.out.println("Comment: " + review.getComment() + "\n");
     }
 }}

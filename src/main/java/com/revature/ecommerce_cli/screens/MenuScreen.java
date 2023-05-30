@@ -53,8 +53,12 @@ public class MenuScreen implements IScreen {
                         logger.info("user sign out");
                         break exit;
                     default:
-                        logger.warn("Invalid option!");
                         clearScreen();
+                        System.out.println("\nInvalid Option!");
+                        System.out.println("\nPress enter to continue...");
+                        logger.trace("Menu screen invalid option");
+                        scan.nextLine();
+                        break;
                 }
             }
         }

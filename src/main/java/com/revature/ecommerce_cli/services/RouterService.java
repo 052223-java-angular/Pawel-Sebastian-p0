@@ -13,7 +13,6 @@ import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
 
 import com.revature.ecommerce_cli.models.Product;
-import com.revature.ecommerce_cli.models.Review;
 import com.revature.ecommerce_cli.models.Session;
 
 import lombok.AllArgsConstructor;
@@ -81,7 +80,7 @@ public class RouterService {
             break;
         
         case "/addreview":
-            new AddReviewScreen(product, getReviewService(), this, session, new Review()).start(scan);
+            new AddReviewScreen(product, getReviewService(), this, session).start(scan);
             break;
         default:
             System.out.println("Invalid path");
