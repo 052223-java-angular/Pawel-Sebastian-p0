@@ -81,7 +81,7 @@ public class RouterService {
             break;
         
         case "/addreview":
-            new AddReviewScreen(product, getReviewService(), this, session, new Review()).start(scan);
+            new AddReviewScreen(product, getReviewService(), this, session).start(scan);
             break;
         default:
             System.out.println("Invalid path");
