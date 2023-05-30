@@ -1,5 +1,5 @@
 package com.revature.ecommerce_cli.models;
-
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,4 +21,10 @@ public class Order {
     private int amount;
     private Date timePlaced;
     
+    public Order (String userId, int amount) {
+        this.id = UUID.randomUUID().toString();
+        this.userId = userId;
+        this.amount = amount;
+        this.timePlaced = new Date();
+    }
 }
