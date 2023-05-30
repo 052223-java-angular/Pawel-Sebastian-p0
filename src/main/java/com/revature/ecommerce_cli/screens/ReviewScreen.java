@@ -52,6 +52,6 @@ public void displayReviews() {
     for (Review review : reviews) {
         System.out.println("User: " + userService.getById(review.getUserId()).getUsername());
         System.out.println("Rating: " + review.getRating());
-        System.out.println("Comment: \n" + review.getComment() + "\n");
+        System.out.println("Comment: " + review.getComment() + "\n");
     }
 }}

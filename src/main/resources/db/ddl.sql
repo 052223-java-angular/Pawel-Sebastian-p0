@@ -58,7 +58,7 @@ create table cart_products(
 create table reviews (
 	id varchar(40) primary key,
 	rating int not null,
-	comment text,
+	comment text default '',
 	user_id varchar(40) not null,
 	product_id varchar(40) not null,
 	foreign key (user_id) references users (id),
