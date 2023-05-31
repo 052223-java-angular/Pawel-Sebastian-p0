@@ -15,6 +15,7 @@ import com.revature.ecommerce_cli.models.CartProduct;
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
 import com.revature.ecommerce_cli.screens.CheckoutScreen;
+import com.revature.ecommerce_cli.services.CartService;
 
 import lombok.AllArgsConstructor;
 
@@ -62,7 +63,7 @@ public class RouterService {
                 new BrowsingScreen(getProductService(), this, session).start(scan);
             break;
             case "/checkout":
-                new CheckoutScreen(session, getOrderService()).start(scan);
+                new CheckoutScreen(session, getOrderService(), getCartService()).start(scan);
             break;
             case "/searching":
                 new SearchingScreen(session, this, getProductService()).start(scan);
@@ -119,7 +120,7 @@ private CartService getCartService(){
 }
 
 private OrderService getOrderService() {
-    return new OrderService(new OrderDAO(), new OrderProductDAO(), new CartProductDAO(), getCartService());
+    return new OrderService(new OrderDAO(), new OrderProductDAO(), new CartProductDAO(), getCartService(), null);
 }
 
 private ProductService getProductService(){
