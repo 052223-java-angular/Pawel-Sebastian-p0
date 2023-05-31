@@ -52,7 +52,7 @@ public class ShoppingCartScreen implements IScreen{
                         break;
                     case "2":
                         if(cartItems.size() == 0) {
-                            logger.info("No Cart items when attempting to modify quantity");
+                            logger.info("No Cart items when attempting to remove product");
                             System.out.println("Shopping cart empty!");
                             System.out.print("\nPress Enter: ");
                             scan.nextLine();
@@ -62,6 +62,13 @@ public class ShoppingCartScreen implements IScreen{
                         removeItem(cartItems, scan);
                         break;
                     case "3":
+                        if(cartItems.size() == 0) {
+                            logger.info("No Cart items when attempting to checkout");
+                            System.out.println("Shopping cart empty!");
+                            System.out.print("\nPress Enter: ");
+                            scan.nextLine();
+                            break;
+                        }
                         logger.info("user begin checkout");
                         router.navigate("/checkout", scan);
                         break exit;
