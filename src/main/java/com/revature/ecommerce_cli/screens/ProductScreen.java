@@ -56,12 +56,14 @@ public class ProductScreen implements IScreen{
             clearScreen();
             switch(input){
                 case "1":
+                    logger.trace("navigate to review review");
                     router.navigate("/review", scan, product);
                     break;
                 case "2":
                     /*
                     if(orderHistoryService.hasUserOrderedProduct(product.getId(), session.getId()))
                     */
+                    logger.trace("navigate to add review");
                     router.navigate("/addreview", scan, product);
                     /*
                         input = "x";
@@ -109,7 +111,7 @@ public class ProductScreen implements IScreen{
         cartProduct.setUserId(session.getId());
         cartProduct.setProductId(product.getId());
         cartProduct.setQuantity(quantity);
-
+        logger.debug("saving cartProduct in ProductScreen");
         cartService.save(cartProduct);
 
         System.out.println("(" + quantity + ") " + product.getName() + "(s) added to cart!");

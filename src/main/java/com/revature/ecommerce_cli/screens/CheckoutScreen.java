@@ -11,17 +11,21 @@ import com.revature.ecommerce_cli.services.OrderService;
 
 import lombok.AllArgsConstructor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @AllArgsConstructor
 public class CheckoutScreen implements IScreen {
 private Session session;
 private OrderService orderService;
 private CartService cartService;
+    
+    private static final Logger logger = LogManager.getLogger(BrowsingScreen.class);
 
     @Override
     public void start(Scanner scan){
         String input = "";
-
+        logger.trace("star checkout screen");
         exit:{
             while(true){
                 clearScreen();

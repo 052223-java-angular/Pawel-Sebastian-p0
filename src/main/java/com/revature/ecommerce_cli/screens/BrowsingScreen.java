@@ -9,6 +9,8 @@ import com.revature.ecommerce_cli.services.RouterService;
 import org.apache.logging.log4j.LogManager;
 import com.revature.ecommerce_cli.services.RouterService;
 import com.revature.ecommerce_cli.services.ProductService;
+
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import lombok.AllArgsConstructor;
 
@@ -18,16 +20,14 @@ public class BrowsingScreen implements IScreen{
     private Session session;
     RouterService router;
     
-    
     public BrowsingScreen(ProductService productService, RouterService routerService, Session session) {
         this.productService = productService;
         this.router = routerService;
         this.session = session;
     }
 
-
-
     private static final Logger logger = LogManager.getLogger(BrowsingScreen.class);
+
     @Override
         public void start(Scanner scan){
         String input = "";
@@ -56,6 +56,7 @@ public class BrowsingScreen implements IScreen{
                     if(productIndex >= 0 && productIndex < productList.size()){
                         Product product = productList.get(productIndex);
                         System.out.println("You selected: " + product.getName());
+                        logger.debug("navigate to product " + product.getName());
                         router.navigate("/product", scan, productList.get(productIndex));
                         return;
                     } else throw new NumberFormatException();
