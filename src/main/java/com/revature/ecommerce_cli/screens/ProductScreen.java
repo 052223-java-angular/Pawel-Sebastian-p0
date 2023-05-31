@@ -95,7 +95,7 @@ public class ProductScreen implements IScreen{
     public void addToCart(Session session, Product product, CartProduct cartProduct, Scanner scan){
 
         while(true){
-        System.out.println("Enter quantity to add to cart:");
+        System.out.println("Enter quantity to add to cart (" + product.getInStock() + " in stock): ");
         int quantity = Integer.parseInt(scan.nextLine()); // ensure to handle exceptions here in case of invalid input
 
         if(quantity > product.getInStock()){
