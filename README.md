@@ -7,6 +7,9 @@ This is a Java-based command-line interface (CLI) eCommerce application. The app
 ## Running
 In order to easily run the program from the source tree, you must have java https://www.oracle.com/java/technologies/downloads/#java17 (preferably java 17) and Apache Maven https://maven.apache.org/download.cgi installed. Run 'mvn compile' and then 'mvn exec:java' from a command line in the root project directory (or use whatever method/extension your IDE/editor offers for maven).
 
+## Database Setup
+A postgresql https://www.postgresql.org/ database server must be set up and running in order for the application to work. there is a ddl.sql script in src/main/resources that will set up the data definition for the postgresql server when sent to it. There are some "dml" sql scripts in the same folder to use for testing purposes, but products should be added to the database somehow. (e.g. using a program like DBeaver)
+
 ## Navigation
 Navigation across pages is achieved via command line input at prompts.
 
