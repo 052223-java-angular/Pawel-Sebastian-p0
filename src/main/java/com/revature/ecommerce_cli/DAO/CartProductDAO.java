@@ -241,4 +241,34 @@ public class CartProductDAO implements CrudDAO<CartProduct> {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    public Optional<CartProduct> findByUserAndProductId(String userId, String productId) {
+        try (Connection conn = ConnectionFactory.getInstance().getConnection()) {
+            String sql = "SELECT * FROM cart_products WHERE user_id = ? AND product_id = ?";
+
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setString(1, userId);
+                ps.setString(2, productId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        CartProduct cartProduct = new CartProduct();
+                        cartProduct.setId(rs.getString("id"));
+                        cartProduct.setUserId(rs.getString("user_id"));
+                        cartProduct.setProductId(rs.getString("product_id"));
+                        cartProduct.setQuantity(rs.getInt("quantity"));
+                        return Optional.of(cartProduct);
+                    } else return Optional.empty();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("couldn't open db.properties");
+            throw new RuntimeException(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.out.println("couldn't find postgres driver for jdbc");
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }
