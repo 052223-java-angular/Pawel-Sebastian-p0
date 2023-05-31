@@ -2,11 +2,14 @@ package com.revature.ecommerce_cli.screens;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
+import com.revature.ecommerce_cli.models.CartProduct;
 import com.revature.ecommerce_cli.models.Order;
 import com.revature.ecommerce_cli.models.OrderProduct;
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
+import com.revature.ecommerce_cli.services.CartService;
 
 import lombok.AllArgsConstructor;
 
@@ -25,6 +28,8 @@ public class ProductScreen implements IScreen{
     private final RouterService router;
     private final Session session;
     private final OrderHistoryService orderHistoryService;
+    private final CartProduct cartProduct;
+    private final CartService cartService;
 
     private static final Logger logger = LogManager.getLogger(ProductScreen.class);
    
@@ -43,6 +48,7 @@ public class ProductScreen implements IScreen{
             
             System.out.println("[1] View Reviews for this Product");
             System.out.println("[2] Add Review for this Product");
+            System.out.println("[3] Add to Cart");
             System.out.println("[x] Exit");
             System.out.print("\nEnter: ");
             input = scan.nextLine();
@@ -66,6 +72,9 @@ public class ProductScreen implements IScreen{
                     }
                     */
                     break;
+                case "3":
+                    addToCart(session, product, cartProduct, scan);
+                    break;
                 case "x":
                     return;
 
@@ -81,6 +90,20 @@ public class ProductScreen implements IScreen{
                 System.out.println("Invalid input");
             }
         }
+    }
+
+    public void addToCart(Session session, Product product, CartProduct cartProduct, Scanner scan){
+
+        cartProduct.setId(UUID.randomUUID().toString());
+        cartProduct.setUserId(session.getId());
+        cartProduct.setProductId(product.getId());
+        cartProduct.setQuantity(1);
+
+        cartService.save(cartProduct);
+
+        System.out.println("(1) " + product.getName() + " added to cart!");
+        System.out.println("\nPress Enter to continue");
+        scan.nextLine();
     }
 
     private void clearScreen() {
