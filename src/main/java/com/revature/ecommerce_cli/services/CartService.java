@@ -24,4 +24,8 @@ public class CartService {
 
     public void save(CartProduct cartProduct) {
         cartProductDAO.save(cartProduct);}
+
+    public void clearCart(String userId) {
+        cartProductDAO.deleteByUserId(userId);
+    }
 }

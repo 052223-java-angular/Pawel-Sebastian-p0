@@ -8,9 +8,13 @@ import com.revature.ecommerce_cli.DAO.OrderDAO;
 import com.revature.ecommerce_cli.DAO.OrderProductDAO;
 import com.revature.ecommerce_cli.DAO.CartProductDAO;
 import com.revature.ecommerce_cli.DTO.CartItem;
+import com.revature.ecommerce_cli.DAO.ProductDAO;
+import com.revature.ecommerce_cli.models.Product;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -19,6 +23,7 @@ public class OrderService {
     private final OrderProductDAO orderProductDAO;
     private final CartProductDAO cartProductDAO;
     private final CartService cartService;
+    private final ProductDAO productDAO;
 
     // private OrderService getOrderService(){
     //     return new OrderService(new OrderDAO());
@@ -33,11 +38,41 @@ public class OrderService {
             cartProducts.add(cartProductDAO.findById(cartItem.getCartProductId()).get());
         }
         Order order = new Order(userId, total);
+        if(!validateStock(order)){
+            throw new RuntimeException("Not enough stock");
+        }
         orderDAO.save(order);
         for (int i = 0; i < cartItems.size(); i++) {
-            OrderProduct orderProduct = new OrderProduct(cartItems.get(i).getCartProductId(), order.getId(),
+            String uniqueOrderProductId = generateUniqueOrderProductId(); 
+            OrderProduct orderProduct = new OrderProduct(uniqueOrderProductId, order.getId(),
                 cartProducts.get(i).getProductId(), cartItems.get(i).getQuantity());
-            orderProductDAO.save(orderProduct);
+            
+                orderProductDAO.save(orderProduct);
+            
         }
+
     }
+    public boolean validateStock(Order order){
+
+        List<OrderProduct> orderProducts = orderProductDAO.findByOrderId(order.getId());
+
+        for (OrderProduct orderProduct : orderProducts) {
+            String productId = orderProduct.getProductId();
+            int quantityOrdered = orderProduct.getQuantity();
+
+            Product product = productDAO.findById(productId).get();
+
+            if (product.getInStock() < quantityOrdered) {
+                return false;
+            }
+            
+        }
+        return true;
+    }
+
+    private String generateUniqueOrderProductId() {
+        return UUID.randomUUID().toString();
+    }
+   
+
 }

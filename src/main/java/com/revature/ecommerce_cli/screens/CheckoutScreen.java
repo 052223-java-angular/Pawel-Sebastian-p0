@@ -6,6 +6,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import com.revature.ecommerce_cli.models.Session;
+import com.revature.ecommerce_cli.services.CartService;
 import com.revature.ecommerce_cli.services.OrderService;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.AllArgsConstructor;
 public class CheckoutScreen implements IScreen {
 private Session session;
 private OrderService orderService;
+private CartService cartService;
 
     @Override
     public void start(Scanner scan){
@@ -47,7 +49,16 @@ private OrderService orderService;
                     System.out.println("Invalid CVV! Please enter a valid 3 digit CVV.");
                     continue;
                 }
+
+
+                
                 orderService.placeOrder(session.getId());
+                cartService.clearCart(session.getId());
+                System.out.println("Thank you for your purchase! Your order has been placed.");
+                System.out.println("Press Enter to continue.");
+                input = scan.nextLine();
+                
+                cartService.clearCart(session.getId());
             }
         }
     }
