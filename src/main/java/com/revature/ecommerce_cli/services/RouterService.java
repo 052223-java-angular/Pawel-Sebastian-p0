@@ -11,10 +11,10 @@ import com.revature.ecommerce_cli.screens.RegisterScreen;
 import com.revature.ecommerce_cli.screens.ReviewScreen;
 import com.revature.ecommerce_cli.screens.SearchingScreen;
 import com.revature.ecommerce_cli.screens.ShoppingCartScreen;
-
+import com.revature.ecommerce_cli.models.CartProduct;
 import com.revature.ecommerce_cli.models.Product;
-import com.revature.ecommerce_cli.models.Review;
 import com.revature.ecommerce_cli.models.Session;
+import com.revature.ecommerce_cli.screens.CheckoutScreen;
 
 import lombok.AllArgsConstructor;
 
@@ -45,9 +45,8 @@ public class RouterService {
                 new LoginScreen(getUserService(), this, session).start(scan);
                 break;
             case "/shopping_cart":
-                new ShoppingCartScreen(getCartService(), session).start(scan);
-
-            break;
+                new ShoppingCartScreen(getCartService(),session, this).start(scan);
+                break;
             case "/order_history":
                 new OrderHistoryScreen(getOrderHistoryService(), getProductService(), session, this).start(scan);
                 
@@ -62,8 +61,12 @@ public class RouterService {
             case "/browsing":
                 new BrowsingScreen(getProductService(), this, session).start(scan);
             break;
+            case "/checkout":
+                new CheckoutScreen(session, getOrderService()).start(scan);
+            break;
             case "/searching":
                 new SearchingScreen(session, this, getProductService()).start(scan);
+            break;
             default:
                 System.out.println("Invalid path");
         break;
@@ -74,21 +77,26 @@ public class RouterService {
     
     switch(path){
         case "/product": 
-            new ProductScreen(product, this, session, new OrderHistoryService(new OrderDAO(),new OrderProductDAO())).start(scan);
+        new ProductScreen(product, this, session, new OrderHistoryService(new OrderDAO(),new OrderProductDAO()), new CartProduct(), new CartService(new CartProductDAO())).start(scan);
             break;
         case "/review":
             new ReviewScreen(product, getReviewService(), getUserService()).start(scan);
             break;
         
         case "/addreview":
-            new AddReviewScreen(product, getReviewService(), this, session, new Review()).start(scan);
+            new AddReviewScreen(product, getReviewService(), this, session).start(scan);
             break;
         default:
             System.out.println("Invalid path");
             break;
     }
-    
     }
+    
+    
+    
+    
+    
+    
     
 
 
@@ -107,10 +115,13 @@ private OrderHistoryService getOrderHistoryService(){
 }
 
 private CartService getCartService(){
-
     return new CartService(new CartProductDAO());
-
 }
+
+private OrderService getOrderService() {
+    return new OrderService(new OrderDAO(), new OrderProductDAO(), new CartProductDAO(), getCartService());
+}
+
 private ProductService getProductService(){
     return new ProductService(new ProductDAO());
 }

@@ -10,6 +10,8 @@ import com.revature.ecommerce_cli.services.ReviewService;
 import com.revature.ecommerce_cli.services.UserService;
 import com.revature.ecommerce_cli.models.Product;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @AllArgsConstructor
 
@@ -18,23 +20,25 @@ public class ReviewScreen implements IScreen{
     private Product product;
     private ReviewService reviewService;
     private UserService userService;
+    private static final Logger logger = LogManager.getLogger(HomeScreen.class);
     
     @Override
     public void start(Scanner scan) {
-    
-    String input = "";
+    logger.debug("starting review screen for " + product.getName());
+
     while(true){
         clearScreen();
         System.out.println("Welcome to the Review Page for " + product.getName() + "!\n");
         displayReviews();
 
         System.out.print("\nPress Enter to return: ");
-        input = scan.nextLine();
+        scan.nextLine();
         /*if(input.equals("x")){
             break;
         }else{
             System.out.println("Invalid input");
         }*/
+        logger.debug("returning from reviews screen");
         break;
     }
     
@@ -51,8 +55,8 @@ public class ReviewScreen implements IScreen{
 public void displayReviews() {
     List<Review> reviews = reviewService.getReviewsByProductId(product.getId());
     for (Review review : reviews) {
-        System.out.println("User: " + userService.getById(review.getUserId()).getUsername());
+        System.out.println("User: " + userService.getUsernameById(review.getUserId()));
         System.out.println("Rating: " + review.getRating());
-        System.out.println("Comment: \n" + review.getComment() + "\n");
+        System.out.println("Comment: " + review.getComment() + "\n");
     }
 }}

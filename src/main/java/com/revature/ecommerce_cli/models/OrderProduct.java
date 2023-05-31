@@ -20,5 +20,4 @@ public class OrderProduct {
     private String orderId;
     private String productId;
     private int quantity; 
-    
 }

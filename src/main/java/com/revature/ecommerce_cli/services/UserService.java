@@ -13,10 +13,7 @@ import lombok.AllArgsConstructor;
 public class UserService {
     private final UserDAO userDao;
 
-    
-
     public User register(String username, String password) {
-        
         String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
         User newUser = new User(username, hashed);
         userDao.save(newUser);
@@ -26,7 +23,7 @@ public class UserService {
     public boolean isValidUsername(String username){
 
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
-    
+
     }
 
     public boolean isUniqueUsername(String username){
@@ -60,6 +57,11 @@ public class UserService {
         Optional<User> user = userDao.findById(id);
         return user.orElseThrow(UserNotFoundException::new);
     } 
+
+    public String getUsernameById(String id) {
+        Optional<String> userName = userDao.findUsernameById(id);
+        return userName.orElseThrow(UserNotFoundException::new);
+    }
 
     public boolean isValidPassword(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
