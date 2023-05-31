@@ -223,8 +223,9 @@ public void priceSearch(Scanner scan, String input){
     clearScreen();
     while(true){
         System.out.println("-Searching by Product Price ");
-        System.out.print("\n-Enter Product Price Lower Bound ($x.xx):\n  $");
+        System.out.print("\n-Enter Product Price Lower Bound ($x.xx) (x to return):\n  $");
         input = scan.nextLine().trim();
+        if(input.equals("x")) return;
         int lowerBoundCents;
         try{
             lowerBoundCents = PriceUtil.toCents(input);
@@ -239,6 +240,7 @@ public void priceSearch(Scanner scan, String input){
 
         System.out.print("\n-Enter Product Price Upper Bound ($x.xx):\n  $");
         input = scan.nextLine().trim();
+        if(input.equals("x")) return;
         try{
             upperBoundCents = PriceUtil.toCents(input);
         }
