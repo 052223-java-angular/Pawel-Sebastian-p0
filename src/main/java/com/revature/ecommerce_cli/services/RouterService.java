@@ -120,7 +120,7 @@ private CartService getCartService(){
 }
 
 private OrderService getOrderService() {
-    return new OrderService(new OrderDAO(), new OrderProductDAO(), new CartProductDAO(), getCartService(), null);
+    return new OrderService(new OrderDAO(), new OrderProductDAO(), new CartProductDAO(), getCartService(), new ProductDAO());
 }
 
 private ProductService getProductService(){
@@ -129,4 +129,6 @@ private ProductService getProductService(){
 private ReviewService getReviewService(){
     return new ReviewService(new ReviewDAO());
 
-}}
+}
+
+}
