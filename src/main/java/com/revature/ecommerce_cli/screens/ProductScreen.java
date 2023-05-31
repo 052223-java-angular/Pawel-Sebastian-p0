@@ -94,16 +94,29 @@ public class ProductScreen implements IScreen{
 
     public void addToCart(Session session, Product product, CartProduct cartProduct, Scanner scan){
 
+        while(true){
+        System.out.println("Enter quantity to add to cart:");
+        int quantity = Integer.parseInt(scan.nextLine()); // ensure to handle exceptions here in case of invalid input
+
+        if(quantity > product.getInStock()){
+            System.out.println("Not enough in stock to add that many to cart!");
+            System.out.println("\nPress Enter to continue");
+            scan.nextLine();
+            continue;
+        }
+
         cartProduct.setId(UUID.randomUUID().toString());
         cartProduct.setUserId(session.getId());
         cartProduct.setProductId(product.getId());
-        cartProduct.setQuantity(1);
+        cartProduct.setQuantity(quantity);
 
         cartService.save(cartProduct);
 
-        System.out.println("(1) " + product.getName() + " added to cart!");
+        System.out.println("(" + quantity + ") " + product.getName() + "(s) added to cart!");
         System.out.println("\nPress Enter to continue");
         scan.nextLine();
+        break;
+    }
     }
 
     private void clearScreen() {
