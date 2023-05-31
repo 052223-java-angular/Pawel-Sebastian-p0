@@ -10,6 +10,7 @@ import com.revature.ecommerce_cli.services.CartService;
 import com.revature.ecommerce_cli.DTO.CartItem;
 import com.revature.ecommerce_cli.models.Session;
 import com.revature.ecommerce_cli.util.PriceUtil;
+import com.revature.ecommerce_cli.services.RouterService;
 
 import lombok.AllArgsConstructor;
 
@@ -17,7 +18,10 @@ import lombok.AllArgsConstructor;
 public class ShoppingCartScreen implements IScreen{
     private final CartService cartService;
     private Session session;
+    private final RouterService router;
     private static final Logger logger = LogManager.getLogger(ShoppingCartScreen.class);
+    
+
 
     @Override
     public void start(Scanner scan) {
@@ -59,6 +63,7 @@ public class ShoppingCartScreen implements IScreen{
                         break;
                     case "3":
                         logger.info("user begin checkout");
+                        router.navigate("/checkout", scan);
                         break exit;
                     case "x":
                         break exit;

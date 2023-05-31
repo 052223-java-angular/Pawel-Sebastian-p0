@@ -2,6 +2,7 @@ package com.revature.ecommerce_cli.screens;
 
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.Optional;
 
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Review;
@@ -25,15 +26,32 @@ public class AddReviewScreen implements IScreen {
 
     @Override
     public void start(Scanner scan) {
-        Review review = new Review();
-
+    Review review;
+    Optional<Review> optReview = reviewService.getByProductIdUserId(product.getId(), session.getId());
+    boolean exists = !optReview.isEmpty();
     String input = "";
 
     while(true){
-        addProductId(review);
-        addUserId(review);
-        addReviewID(review);
-        //addRating(scan);
+        if(exists) {
+            System.out.print("Review already exists for product; overwrite? (y/n): ");
+            inputLoop: while (true) {
+                input = scan.nextLine();
+                switch(input) {
+                    case "y":
+                        review = optReview.get();
+                        break inputLoop;
+                    case "n":
+                        return;
+                    default:
+                        System.out.println("Invalid input; enter y or n: ");
+                }
+            }
+        } else {
+            review = new Review();
+            addProductId(review);
+            addUserId(review);
+            addReviewID(review);
+        } 
         clearScreen();
         System.out.println("Welcome to the product review page for: " + product.getName() + "!");
        
@@ -44,7 +62,7 @@ public class AddReviewScreen implements IScreen {
             return;}
         if(addRating(scan, review)) return;
         addReview(scan, review);
-        saveReview(review);
+        saveReview(review, exists);
         clearScreen();
         System.out.println("Review added! Thanks for your feedback!");
 
@@ -67,7 +85,6 @@ public void addReview(Scanner scan, Review review) {
             break;
         }
     }
-   
 }
 
 public void addProductId(Review review){
@@ -84,7 +101,6 @@ public void addUserId(Review review){
 }
 
 public boolean addRating(Scanner scan, Review review) {
-
     clearScreen();
     while(true){
         System.out.println("Please enter your rating (a number between 1 and 5): (x to go back) ");
@@ -98,7 +114,6 @@ public boolean addRating(Scanner scan, Review review) {
                 if (intRating < 1 || intRating > 5) {
                     throw new NumberFormatException();
                 }else{
-                
                     review.setRating(intRating);
                     return false;
                 }
@@ -111,8 +126,9 @@ public boolean addRating(Scanner scan, Review review) {
     }
 }
    
-    public void saveReview(Review review){
-        reviewService.saveReview(review);
+    public void saveReview(Review review, boolean exists){
+        if(exists) reviewService.updateReview(review);
+        else reviewService.saveReview(review);
     }
 
 private void clearScreen() {

@@ -19,6 +19,7 @@ After opening the application, the user has the option to login, register, or ex
 Registration and Logging in brings users to the Main Menu.
 From the menu the user can navigate to the Shopping Cart, Browse Products, Search Products, and view their order history.
 
+
 ## Shopping Cart
 The Shopping Cart allows the user to view the items in their cart, with options to remove items and change quantity. If the user enters "0" for quantity item will be removed as well after prompting.
 
@@ -46,3 +47,4 @@ User inputs a price range to search for products in. Returns list of products th
 The user is presented with a list of their previous orders.
 They can input an ID number to go to the page for an order and see the items in that order.
 On that page, they can navigate to a product's page by inputting its ID.
+
