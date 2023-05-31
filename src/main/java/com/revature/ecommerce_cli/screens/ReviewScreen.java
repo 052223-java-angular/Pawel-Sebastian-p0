@@ -10,6 +10,8 @@ import com.revature.ecommerce_cli.services.ReviewService;
 import com.revature.ecommerce_cli.services.UserService;
 import com.revature.ecommerce_cli.models.Product;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @AllArgsConstructor
 
@@ -18,10 +20,12 @@ public class ReviewScreen implements IScreen{
     private Product product;
     private ReviewService reviewService;
     private UserService userService;
+    private static final Logger logger = LogManager.getLogger(HomeScreen.class);
     
     @Override
     public void start(Scanner scan) {
-    
+    logger.debug("starting review screen for " + product.getName());
+
     while(true){
         clearScreen();
         System.out.println("Welcome to the Review Page for " + product.getName() + "!\n");
@@ -34,6 +38,7 @@ public class ReviewScreen implements IScreen{
         }else{
             System.out.println("Invalid input");
         }*/
+        logger.debug("returning from reviews screen");
         break;
     }
     
