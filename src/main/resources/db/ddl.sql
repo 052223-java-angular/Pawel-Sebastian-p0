@@ -39,8 +39,8 @@ create table orders (
 
 create table order_products(
 	id varchar(40) PRIMARY KEY,
-	order_id varchar(40),
-	product_id varchar(40),
+	order_id varchar(40) not null,
+	product_id varchar(40) not null,
 	quantity integer not null,
 	foreign key (order_id) references orders(id),
 	foreign key (product_id) references products(id)
@@ -48,8 +48,8 @@ create table order_products(
 
 create table cart_products(
 	id varchar(40) PRIMARY KEY,
-	user_id varchar(40),
-	product_id varchar(40),
+	user_id varchar(40) not null,
+	product_id varchar(40) not null,
 	quantity integer not null,
 	foreign key (user_id) references users(id),
 	foreign key (product_id) references products(id)
@@ -58,7 +58,8 @@ create table cart_products(
 create table reviews (
 	id varchar(40) primary key,
 	rating int not null,
-	comment text default '',
+	comment text NOT NULL default '',
+
 	user_id varchar(40) not null,
 	product_id varchar(40) not null,
 	foreign key (user_id) references users (id),
