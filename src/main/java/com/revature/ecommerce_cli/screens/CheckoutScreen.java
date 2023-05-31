@@ -1,7 +1,5 @@
 package com.revature.ecommerce_cli.screens;
 
-import java.time.LocalDate;
-import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,17 +10,21 @@ import com.revature.ecommerce_cli.services.OrderService;
 
 import lombok.AllArgsConstructor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @AllArgsConstructor
 public class CheckoutScreen implements IScreen {
 private Session session;
 private OrderService orderService;
 private CartService cartService;
+    
+    private static final Logger logger = LogManager.getLogger(BrowsingScreen.class);
 
     @Override
     public void start(Scanner scan){
         String input = "";
-
+        logger.trace("star checkout screen");
         exit:{
             clearScreen();
             while(true){
@@ -31,6 +33,7 @@ private CartService cartService;
                 System.out.println("\nPlease enter your credit card number below:");
                 System.out.println("\nPress x to go back.");
                 input = scan.nextLine();
+                logger.trace("validating card number");
                 while(!validateLength(input)){
                     if(input.equals("x")){
                         break exit;
@@ -41,6 +44,7 @@ private CartService cartService;
                 }
                 System.out.println("Please enter your credit card expiration date (MM/yy) below (x: cancel):");
                 input = scan.nextLine();
+                logger.trace("validating expiration date");
                 while (!validateExpirationDate(input)){
                     if(input.equals("x")){
                         break exit;
@@ -51,6 +55,7 @@ private CartService cartService;
                 }
                 System.out.println("Please enter your credit card CVV below (x to cancel): ");
                 input = scan.nextLine();
+                logger.trace("validating CVV");
                 while (!validateCVV(input)){
                     if(input.equals("x")){
                         break exit;
@@ -61,11 +66,12 @@ private CartService cartService;
                 }
 
                 System.out.println("Thank you for your purchase! Your order has been placed.");
+                logger.trace("Placing Order");
                 orderService.placeOrder(session.getId());
+                logger.trace("clearing cart");
                 cartService.clearCart(session.getId());
                 System.out.println("Press Enter to continue.");
                 input = scan.nextLine();
-
 
                 return;
             }
