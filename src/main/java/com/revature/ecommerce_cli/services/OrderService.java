@@ -45,10 +45,14 @@ public class OrderService {
         for (int i = 0; i < cartItems.size(); i++) {
             String uniqueOrderProductId = generateUniqueOrderProductId(); 
             OrderProduct orderProduct = new OrderProduct(uniqueOrderProductId, order.getId(),
-                cartProducts.get(i).getProductId(), cartItems.get(i).getQuantity());
+            cartProducts.get(i).getProductId(), cartItems.get(i).getQuantity());
             
-                orderProductDAO.save(orderProduct);
-            
+            orderProductDAO.save(orderProduct);
+            Product product = productDAO.findById(cartProducts.get(i).getProductId()).get();
+            product.setInStock(product.getInStock() - cartItems.get(i).getQuantity());
+            productDAO.update(product);     
+
+
         }
 
     }
