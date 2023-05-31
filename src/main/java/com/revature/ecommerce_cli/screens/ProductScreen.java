@@ -1,12 +1,10 @@
 package com.revature.ecommerce_cli.screens;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.UUID;
 
 import com.revature.ecommerce_cli.models.CartProduct;
-import com.revature.ecommerce_cli.models.Order;
-import com.revature.ecommerce_cli.models.OrderProduct;
 import com.revature.ecommerce_cli.models.Product;
 import com.revature.ecommerce_cli.models.Session;
 import com.revature.ecommerce_cli.services.CartService;
@@ -35,7 +33,6 @@ public class ProductScreen implements IScreen{
    
     @Override
     public void start(Scanner scan) {
-        boolean hasReviewed = false;    
         String input = "";
         while(true){
             logger.debug("Redrawing");
@@ -73,7 +70,7 @@ public class ProductScreen implements IScreen{
                     */
                     break;
                 case "3":
-                    addToCart(session, product, cartProduct, scan);
+                    addToCart(cartProduct, scan);
                     break;
                 case "x":
                     return;
@@ -92,31 +89,50 @@ public class ProductScreen implements IScreen{
         }
     }
 
-    public void addToCart(Session session, Product product, CartProduct cartProduct, Scanner scan){
-
+    public void addToCart(CartProduct cartProduct, Scanner scan){
+        String input = "";
+        int quantity, existingQuantity = 0; 
+        Optional<CartProduct> existing = cartService.getByUserAndProductId(session.getId(), product.getId());
+        if(!existing.isEmpty()) existingQuantity = existing.get().getQuantity();
         while(true){
-        System.out.println("Enter quantity to add to cart (" + product.getInStock() + " in stock): ");
-        int quantity = Integer.parseInt(scan.nextLine()); // ensure to handle exceptions here in case of invalid input
+            System.out.println("Enter quantity to add to cart (" + product.getInStock() + " in stock, " +
+                existingQuantity + " in cart) (x to return): ");
+            input = scan.nextLine();
+            if(input.equals("x")) return;
 
-        if(quantity > product.getInStock()){
-            System.out.println("Not enough in stock to add that many to cart!");
+            try {
+                quantity = Integer.parseInt(input);
+            } catch (Exception e) {
+                System.out.println("Insert valid quantity");
+                continue;
+            }
+            int limit = quantity + existingQuantity;
+            if(limit > product.getInStock()){
+                clearScreen();
+                System.out.println("Not enough in stock to add that many to cart!");
+                continue;
+            } else if (limit < 0) {
+                clearScreen();
+                System.out.println("can't have negative quantity in cart");
+                continue;
+            } else if (limit == 0) {
+                if(!existing.isEmpty()) cartService.deleteById(existing.get().getId());
+            }
+            if(existing.isEmpty()) {
+                cartProduct.setId(UUID.randomUUID().toString());
+                cartProduct.setUserId(session.getId());
+                cartProduct.setProductId(product.getId());
+                cartProduct.setQuantity(quantity);
+
+                cartService.save(cartProduct);
+            } else {
+                cartService.updateQuantityById(existing.get().getId(), limit);
+            }
+            System.out.println("(" + quantity + ") " + product.getName() + "(s) added to cart!");
             System.out.println("\nPress Enter to continue");
             scan.nextLine();
-            continue;
+            break;
         }
-
-        cartProduct.setId(UUID.randomUUID().toString());
-        cartProduct.setUserId(session.getId());
-        cartProduct.setProductId(product.getId());
-        cartProduct.setQuantity(quantity);
-
-        cartService.save(cartProduct);
-
-        System.out.println("(" + quantity + ") " + product.getName() + "(s) added to cart!");
-        System.out.println("\nPress Enter to continue");
-        scan.nextLine();
-        break;
-    }
     }
 
     private void clearScreen() {

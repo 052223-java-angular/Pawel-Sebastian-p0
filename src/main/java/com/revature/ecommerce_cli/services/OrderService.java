@@ -51,8 +51,6 @@ public class OrderService {
             Product product = productDAO.findById(cartProducts.get(i).getProductId()).get();
             product.setInStock(product.getInStock() - cartItems.get(i).getQuantity());
             productDAO.update(product);     
-
-
         }
 
     }
